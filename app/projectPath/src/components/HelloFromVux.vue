@@ -14,10 +14,10 @@
     <count-down class="timer" v-on:start_callback="countDownS_cb(1)" v-on:end_callback="countDownE_cb(1)" :currentTime="currentTime" :startTime="startTime" :endTime="1519938000000" :tipText="'距离开始文字1'" :tipTextEnd="'距离结束文字1'" :endText="'结束自定义文字2'" :dayTxt="'天'" :hourTxt="'小时'" :minutesTxt="'分钟'" :secondsTxt="'秒'"></count-down>
     <div class="list">
       <span class="listTitle">排行榜</span>
-      <div>
-        <span>1</span>
-        <span> 昵称</span>
-        <span>共签到n次</span>
+      <div v-for="(info,index) in infos">
+        <span>{{index+1}}</span>
+        <span> {{info.name}}</span>
+        <span>共签到{{info.createTime.length}}次</span>
       </div>
     </div>
 
@@ -31,10 +31,6 @@
     </footer>
 
   </div>
-  
-  
-
- 
 </template>
 
 <script>
@@ -46,12 +42,13 @@ export default {
   },
   data() {
     return {
-      name: "cyf",
+      name: "ft",
       btnText: "支付一元立即参与",
       money: 0,
       peopleCount: 0,
       startTime:( new Date() ).getTime(),
       currentTime:( new Date() ).getTime(),
+      infos:[],
     };
   },
   // ready: function countTime() {
@@ -76,7 +73,7 @@ export default {
   //     this.s = s;
   //   }, 1000);
   // },
-  mounted: function get() {
+  mounted: async function get() {
     var date = new Date();
     var month = date.getMonth() + 1;
     var day = date.getDate();
@@ -85,8 +82,11 @@ export default {
       .then(res => {
         // console.log(res.data.haveUser);
         var haveUser = res.data.haveUser;
+        
         if (haveUser == "yes"){
-          this.btnText = "抢红包";
+          console.log(res.data);
+          this.infos = res.data.db;
+          // this.btnText = "抢红包";
         }
         this.money = res.data.count;
         this.peopleCount = res.data.count;
@@ -163,7 +163,8 @@ export default {
     //   setTimeout(countTime,1000);
     // },
     join() {
-      alert("支付成功");
+      if (this.btnText === "支付一元立即参与") {
+        alert("支付成功");
       var date = new Date();
       var year = date.getUTCFullYear();
       var month = date.getMonth() + 1;
@@ -184,9 +185,36 @@ export default {
         .then(res => {
           if ((res.data = "ok")) {
             this.btnText = "抢红包";
-            countTime();
+            
           }
         });
+      }else{
+        alert('时间还没到，不能领取哦')
+      }
+      // alert("支付成功");
+      // var date = new Date();
+      // var year = date.getUTCFullYear();
+      // var month = date.getMonth() + 1;
+      // var day = date.getDate();
+      // console.log(year, month, day);
+      // axios
+      //   .post("/join", {
+      //     info: {
+      //       name: this.name,
+      //       money: 1,
+      //       createTime: {
+      //         year: year,
+      //         month: month,
+      //         day: day
+      //       }
+      //     }
+      //   })
+      //   .then(res => {
+      //     if ((res.data = "ok")) {
+      //       this.btnText = "抢红包";
+      //       countTime();
+      //     }
+      //   });
     }
   },
   computed: {}

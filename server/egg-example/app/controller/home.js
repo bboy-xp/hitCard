@@ -17,7 +17,12 @@ class HomeController extends Controller {
     var month = ctx.request.body.info.createTime.month;
     var day = ctx.request.body.info.createTime.day;
 
+
+
     var User = ctx.model.User;
+    await User.find({name:name}).then((res) => {
+      console.log(res);
+    })
     var user = new User ({
       name: name,
       money: money,
@@ -33,7 +38,17 @@ class HomeController extends Controller {
   }
   async getInfo () {
     const ctx = this.ctx;
-    ctx.body = 'success';
+    var info = {};
+    var User = ctx.model.User;
+    //注意Model.find查询数据库时回掉函数有顺序，先err后docs
+    await User.find({createTime:[{"day" : 1, "month" : 3, "year" : 2018}]},function(err,docs){
+      // console.log(docs);
+      info.count = docs.length;
+      
+    });
+    
+    // console.log(count);
+    ctx.body = info;
   }
 }
 

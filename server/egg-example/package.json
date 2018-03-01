@@ -6,7 +6,8 @@
   "dependencies": {
     "egg": "^2.2.1",
     "egg-mongoose": "^2.1.1",
-    "egg-scripts": "^2.5.0"
+    "egg-scripts": "^2.5.0",
+    "vue2-countdown": "^1.0.8"
   },
   "devDependencies": {
     "autod": "^3.0.1",

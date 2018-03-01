@@ -11,7 +11,7 @@
         {{btnText}}
       </button>
     </div>
-    <span class="timer">倒计时{{h}}小时{{m}}分{{s}}秒</span>
+    <count-down class="timer" v-on:start_callback="countDownS_cb(1)" v-on:end_callback="countDownE_cb(1)" :currentTime="currentTime" :startTime="startTime" :endTime="1519938000000" :tipText="'距离开始文字1'" :tipTextEnd="'距离结束文字1'" :endText="'结束自定义文字2'" :dayTxt="'天'" :hourTxt="'小时'" :minutesTxt="'分钟'" :secondsTxt="'秒'"></count-down>
     <div class="list">
       <span class="listTitle">排行榜</span>
       <div>
@@ -39,17 +39,19 @@
 
 <script>
 import axios from "axios";
+import CountDown from 'vue2-countdown'
 export default {
-  components: {},
+  components: {
+    CountDown
+  },
   data() {
     return {
-      name: "ft",
+      name: "cyf",
       btnText: "支付一元立即参与",
       money: 0,
       peopleCount: 0,
-      h: 0,
-      m: 0,
-      s: 0
+      startTime:( new Date() ).getTime(),
+      currentTime:( new Date() ).getTime(),
     };
   },
   // ready: function countTime() {
@@ -58,8 +60,8 @@ export default {
   //     var month = date.getMonth() + 1;
   //     var day = date.getDate();
   //     var now = date.getTime();
-  //     var endDate = new Date("2018-3-2 05:00:00");
-  //     var end = endDate.getTime();
+      // var endDate = new Date("2018-3-2 05:00:00");
+      // var end = endDate.getTime();
   //     var leftTime = end - now;
   //     console.log(leftTime);
   //     var h, m, s;
@@ -79,9 +81,13 @@ export default {
     var month = date.getMonth() + 1;
     var day = date.getDate();
     axios
-      .post("/getInfo", { name: "xp", time: { month: month, day: day } })
+      .post("/getInfo", { name: this.name, time: { month: month, day: day } })
       .then(res => {
-        console.log(res);
+        // console.log(res.data.haveUser);
+        var haveUser = res.data.haveUser;
+        if (haveUser == "yes"){
+          this.btnText = "抢红包";
+        }
         this.money = res.data.count;
         this.peopleCount = res.data.count;
       });
@@ -119,29 +125,43 @@ export default {
     // this.m = m;
     // this.s = s;
     // setTimeout(get,1000);
+
+    // var now = date.getTime();
+    // var endDate = new Date("2018-3-2 05:00:00");
+    // var end = endDate.getTime();
+    // console.log(now);
+    // this.currentTime = now;
+    // this.startTime = now;
+    // this.endTime = end;
   },
   methods: {
-    countTime(){
-      var date = new Date();
-      var now = date.getTime();
-      var month = date.getMonth()+1;
-      var day =date.getDate() + 1;
-      var endTime = new Date("2018-"+month+"-"+day+" 05:00:00");
-      var end = endTime.getTime();
-      var leftTime = end-now;
-      console.log(leftTime);
-      var h,m,s;
-      if (leftTime>=0) {
-        h = Math.floor(leftTime/1000/60/60%24);
-        m = Math.floor(leftTime/1000/60%60);
-        s = Math.floor(leftTime/1000%60);
-      }
-      console.log(h,m,s);
-      this.h = h;
-      this.m = m;
-      this.s = s;
-      setTimeout(countTime,1000);
+    countDownS_cb: function (x) {
+      console.log(x)
     },
+    countDownE_cb: function (x) {
+      console.log(x)
+    },
+    // countTime(){
+    //   var date = new Date();
+    //   var now = date.getTime();
+    //   var month = date.getMonth()+1;
+    //   var day =date.getDate() + 1;
+    //   var endTime = new Date("2018-"+month+"-"+day+" 05:00:00");
+    //   var end = endTime.getTime();
+    //   var leftTime = end-now;
+    //   console.log(leftTime);
+    //   var h,m,s;
+    //   if (leftTime>=0) {
+    //     h = Math.floor(leftTime/1000/60/60%24);
+    //     m = Math.floor(leftTime/1000/60%60);
+    //     s = Math.floor(leftTime/1000%60);
+    //   }
+    //   console.log(h,m,s);
+    //   this.h = h;
+    //   this.m = m;
+    //   this.s = s;
+    //   setTimeout(countTime,1000);
+    // },
     join() {
       alert("支付成功");
       var date = new Date();
@@ -225,6 +245,6 @@ export default {
 .timer {
   position: absolute;
   top: 220px;
-  left: 70px;
+  left: 110px;
 }
 </style>

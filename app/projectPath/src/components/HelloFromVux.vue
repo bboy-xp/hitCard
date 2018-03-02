@@ -11,13 +11,13 @@
         {{btnText}}
       </button>
     </div>
-    <count-down class="timer" v-on:start_callback="countDownS_cb(1)" v-on:end_callback="countDownE_cb(1)" :currentTime="currentTime" :startTime="startTime" :endTime="1519938000000" :tipText="'距离开始文字1'" :tipTextEnd="'距离结束文字1'" :endText="'结束自定义文字2'" :dayTxt="'天'" :hourTxt="'小时'" :minutesTxt="'分钟'" :secondsTxt="'秒'"></count-down>
+    <count-down class="timer" v-on:start_callback="countDownS_cb(1)" v-on:end_callback="countDownE_cb(1)" :currentTime="currentTime" :startTime="startTime" :endTime="1520024400000" :tipText="'距离开始文字1'" :tipTextEnd="'距离结束文字1'" :endText="'结束自定义文字2'" :dayTxt="'天'" :hourTxt="'小时'" :minutesTxt="'分钟'" :secondsTxt="'秒'"></count-down>
     <div class="list">
-      <span class="listTitle">排行榜</span>
-      <div v-for="(info,index) in infos">
+      <span class="listTitle">今日签到实况</span>
+      <div v-for="(info,index) in infos" :key="info">
         <span>{{index+1}}</span>
         <span> {{info.name}}</span>
-        <span>共签到{{info.createTime.length}}次</span>
+        <span>签到1次</span>
       </div>
     </div>
 
@@ -42,7 +42,7 @@ export default {
   },
   data() {
     return {
-      name: "ft",
+      name: "xp",
       btnText: "支付一元立即参与",
       money: 0,
       peopleCount: 0,
@@ -51,28 +51,7 @@ export default {
       infos:[],
     };
   },
-  // ready: function countTime() {
-  //   setTimeout(function() {
-  //     var date = new Date();
-  //     var month = date.getMonth() + 1;
-  //     var day = date.getDate();
-  //     var now = date.getTime();
-      // var endDate = new Date("2018-3-2 05:00:00");
-      // var end = endDate.getTime();
-  //     var leftTime = end - now;
-  //     console.log(leftTime);
-  //     var h, m, s;
-  //     if (leftTime >= 0) {
-  //       h = Math.floor((leftTime / 1000 / 60 / 60) % 24);
-  //       m = Math.floor((leftTime / 1000 / 60) % 60);
-  //       s = Math.floor((leftTime / 1000) % 60);
-  //     }
-  //     console.log(h, m, s);
-  //     this.h = h;
-  //     this.m = m;
-  //     this.s = s;
-  //   }, 1000);
-  // },
+  
   mounted: async function get() {
     var date = new Date();
     var month = date.getMonth() + 1;
@@ -92,76 +71,16 @@ export default {
         this.peopleCount = res.data.count;
       });
 
-    // var now = date.getTime();
-
-    // var endTime = new Date("2018-"+month+"-"+day+"05:00:00");
-    // var end = endTime.getTime();
-    // var leftTime = end-now;
-    // var h,m,s;
-    // if (leftTime>=0) {
-    //   h = Math.floor(leftTime/1000/60/60%24);
-    //   m = Math.floor(leftTime/1000/60%60);
-    //   s = Math.floor(leftTime/1000%60);
-    // }
-    // console.log(h,m,s);
-    // this.h = h;
-    // this.m = m;
-    // this.s = s;
-    // setTimeout(countTime,1000);
-
-    // var now = date.getTime();
-    // var endDate = new Date("2018-3-2 05:00:00");
-    // var end = endDate.getTime();
-    // var leftTime = end-now;
-    // console.log(leftTime);
-    // var h,m,s;
-    // if (leftTime>=0) {
-    //   h = Math.floor(leftTime/1000/60/60%24);
-    //   m = Math.floor(leftTime/1000/60%60);
-    //   s = Math.floor(leftTime/1000%60);
-    // }
-    // console.log(h,m,s);
-    // this.h = h;
-    // this.m = m;
-    // this.s = s;
-    // setTimeout(get,1000);
-
-    // var now = date.getTime();
-    // var endDate = new Date("2018-3-2 05:00:00");
-    // var end = endDate.getTime();
-    // console.log(now);
-    // this.currentTime = now;
-    // this.startTime = now;
-    // this.endTime = end;
+    
   },
   methods: {
     countDownS_cb: function (x) {
-      console.log(x)
+      // console.log(x)
     },
     countDownE_cb: function (x) {
-      console.log(x)
+      // console.log(x)
     },
-    // countTime(){
-    //   var date = new Date();
-    //   var now = date.getTime();
-    //   var month = date.getMonth()+1;
-    //   var day =date.getDate() + 1;
-    //   var endTime = new Date("2018-"+month+"-"+day+" 05:00:00");
-    //   var end = endTime.getTime();
-    //   var leftTime = end-now;
-    //   console.log(leftTime);
-    //   var h,m,s;
-    //   if (leftTime>=0) {
-    //     h = Math.floor(leftTime/1000/60/60%24);
-    //     m = Math.floor(leftTime/1000/60%60);
-    //     s = Math.floor(leftTime/1000%60);
-    //   }
-    //   console.log(h,m,s);
-    //   this.h = h;
-    //   this.m = m;
-    //   this.s = s;
-    //   setTimeout(countTime,1000);
-    // },
+   
     join() {
       if (this.btnText === "支付一元立即参与") {
         alert("支付成功");
@@ -169,7 +88,7 @@ export default {
       var year = date.getUTCFullYear();
       var month = date.getMonth() + 1;
       var day = date.getDate();
-      console.log(year, month, day);
+      // console.log(year, month, day);
       axios
         .post("/join", {
           info: {
@@ -183,6 +102,7 @@ export default {
           }
         })
         .then(res => {
+          console.log(res.data);
           if ((res.data = "ok")) {
             this.btnText = "抢红包";
             
@@ -191,30 +111,7 @@ export default {
       }else{
         alert('时间还没到，不能领取哦')
       }
-      // alert("支付成功");
-      // var date = new Date();
-      // var year = date.getUTCFullYear();
-      // var month = date.getMonth() + 1;
-      // var day = date.getDate();
-      // console.log(year, month, day);
-      // axios
-      //   .post("/join", {
-      //     info: {
-      //       name: this.name,
-      //       money: 1,
-      //       createTime: {
-      //         year: year,
-      //         month: month,
-      //         day: day
-      //       }
-      //     }
-      //   })
-      //   .then(res => {
-      //     if ((res.data = "ok")) {
-      //       this.btnText = "抢红包";
-      //       countTime();
-      //     }
-      //   });
+      
     }
   },
   computed: {}

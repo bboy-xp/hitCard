@@ -14,7 +14,7 @@
     <count-down class="timer" v-on:start_callback="countDownS_cb(1)" v-on:end_callback="countDownE_cb(1)" :currentTime="currentTime" :startTime="startTime" :endTime="1519938000000" :tipText="'距离开始文字1'" :tipTextEnd="'距离结束文字1'" :endText="'结束自定义文字2'" :dayTxt="'天'" :hourTxt="'小时'" :minutesTxt="'分钟'" :secondsTxt="'秒'"></count-down>
     <div class="list">
       <span class="listTitle">排行榜</span>
-      <div v-for="(info,index) in infos">
+      <div v-for="(info,index) in infos" :key="info">
         <span>{{index+1}}</span>
         <span> {{info.name}}</span>
         <span>共签到{{info.createTime.length}}次</span>

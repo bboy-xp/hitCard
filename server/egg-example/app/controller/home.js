@@ -89,6 +89,18 @@ class HomeController extends Controller {
     // console.log(count);
     ctx.body = info;
   }
+  async meGetInfo () {
+    const ctx = this.ctx;
+    var name = ctx.request.body.name;
+    // console.log(name);
+    var User = ctx.model.User;
+    var info = [];
+    await User.find({name : name},function(err,docs){
+      console.log(docs.length);
+      info = docs;
+    })
+    ctx.body = info;
+  }
 }
 
 module.exports = HomeController;

@@ -18,6 +18,10 @@ module.exports = {
       '/getInfo': {
         target: 'http://127.0.0.1:7001',
         changeOrigin: 'true',
+      },
+      '/meGetInfo': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: 'true',
       }
     },
 

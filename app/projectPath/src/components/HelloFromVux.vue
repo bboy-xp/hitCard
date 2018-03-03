@@ -11,7 +11,7 @@
         {{btnText}}
       </button>
     </div>
-    <count-down class="timer" v-on:start_callback="countDownS_cb(1)" v-on:end_callback="countDownE_cb(1)" :currentTime="currentTime" :startTime="startTime" :endTime="1520024400000" :tipText="'距离开始文字1'" :tipTextEnd="'距离结束文字1'" :endText="'结束自定义文字2'" :dayTxt="'天'" :hourTxt="'小时'" :minutesTxt="'分钟'" :secondsTxt="'秒'"></count-down>
+    <count-down class="timer" v-on:start_callback="countDownS_cb(1)" v-on:end_callback="countDownE_cb(1)" :currentTime="currentTime" :startTime="startTime" :endTime="endTime" :tipText="'距离开始文字1'" :tipTextEnd="'距离结束文字1'" :endText="'结束自定义文字2'" :dayTxt="'天'" :hourTxt="'小时'" :minutesTxt="'分钟'" :secondsTxt="'秒'"></count-down>
     <div class="list">
       <span class="listTitle">今日签到实况</span>
       <div v-for="(info,index) in infos" :key="info">
@@ -20,14 +20,18 @@
         <span>签到1次</span>
       </div>
     </div>
-
+   
     <footer class="tabbar">
+      
       <div class="tabbarItem">
         天天红包
       </div>
-      <div class="tabbarItem">
+      
+      
+      <div v-on:click="me" class="tabbarItem">
         我的主页
       </div>
+        
     </footer>
 
   </div>
@@ -42,12 +46,13 @@ export default {
   },
   data() {
     return {
-      name: "xp",
+      name: "hhp",
       btnText: "支付一元立即参与",
       money: 0,
       peopleCount: 0,
       startTime:( new Date() ).getTime(),
       currentTime:( new Date() ).getTime(),
+      endTime:1520110800000,
       infos:[],
     };
   },
@@ -56,16 +61,19 @@ export default {
     var date = new Date();
     var month = date.getMonth() + 1;
     var day = date.getDate();
+    this.endTime = new Date('2018-3-5 00:00:00').getTime();
+    // console.log(this.endTime);
+    // this.endTime = endtime;
     axios
       .post("/getInfo", { name: this.name, time: { month: month, day: day } })
       .then(res => {
         // console.log(res.data.haveUser);
         var haveUser = res.data.haveUser;
         
+          // console.log(res.data);
         if (haveUser == "yes"){
-          console.log(res.data);
           this.infos = res.data.db;
-          // this.btnText = "抢红包";
+          this.btnText = "抢红包";
         }
         this.money = res.data.count;
         this.peopleCount = res.data.count;
@@ -102,16 +110,20 @@ export default {
           }
         })
         .then(res => {
-          console.log(res.data);
+          // console.log(res.data);
           if ((res.data = "ok")) {
-            this.btnText = "抢红包";
+            
+            window.location.reload(); 
             
           }
         });
       }else{
-        alert('时间还没到，不能领取哦')
+        alert('时间还没到，不能领取哦');
       }
       
+    },
+    me() {
+      location.href="";
     }
   },
   computed: {}

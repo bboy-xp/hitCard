@@ -10,48 +10,49 @@ class HomeController extends Controller {
     const ctx = this.ctx;
     
     // console.log(ctx.request.body);
-
+    
     var name = ctx.request.body.info.name;
     var money = ctx.request.body.info.money;
     var year = ctx.request.body.info.createTime.year;
     var month = ctx.request.body.info.createTime.month;
     var day = ctx.request.body.info.createTime.day;
-
+    
     var info;
-
-
+    
+    
     var User = ctx.model.User;
     
     // 查询是否数据库里有用户，如果有将createTime追加到用户的数据里面
-    // await User.find({name:name},function(err,docs){
-    //   console.log(docs); 
-    //   if (docs !== []) {
-    //     console.log('用户已存在');
-
-    //     var user = new User ({
-    //       name: name,
-    //       money: money,
-    //       createTime: [{
-    //         year: year,
-    //         month: month,
-    //         day: day
-    //       }]
-    //     })
-    //     await user.save();
-    //   }
-    // })
-    var user = new User ({
-      name: name,
-      money: money,
-      createTime: [{
-        year: year,
-        month: month,
-        day: day
-      }]
+    const haveUser = await new Promise((resolve, reject) => {
+      User.find({name:name},function(err,docs){
+        // console.log(docs); 
+        if (docs.length !== 0) {
+          console.log(docs);
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      })
     })
-    await user.save();
+    
+    console.log('走到这里了');
+    console.log(haveUser);
+    if (!haveUser) {
+      var user = new User ({
+        name: name,
+        money: money,
+        createTime: [{
+          year: year,
+          month: month,
+          day: day
+        }]
+      })
+      user.save();
+      ctx.body = 'ok';
+    } else {
+      ctx.body = 'unfinished';
+    }
 
-    ctx.body = 'ok';
   }
   async getInfo () {
     const ctx = this.ctx;
@@ -79,11 +80,12 @@ class HomeController extends Controller {
       }
     });
     //查询数据库所有数据，发送给前端做排行榜
-    await User.find({createTime:[{"day" : day, "month" : month, "year" : 2018}]},function(err,docs){
-      info.db = docs;
-      
-      // console.log(docs);
-    });
+    const docs = await new Promise((resolve, reject) => {
+      User.find({createTime:[{"day" : day, "month" : month, "year" : 2018}]},function(err,docs){
+        resolve(docs)
+      }); 
+    })
+    info.db = docs;
     
     
     // console.log(count);

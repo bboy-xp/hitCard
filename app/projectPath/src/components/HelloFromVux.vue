@@ -14,7 +14,7 @@
     <count-down class="timer" v-on:start_callback="countDownS_cb(1)" v-on:end_callback="countDownE_cb(1)" :currentTime="currentTime" :startTime="startTime" :endTime="endTime" :tipText="'距离开始文字1'" :tipTextEnd="'距离结束文字1'" :endText="'结束自定义文字2'" :dayTxt="'天'" :hourTxt="'小时'" :minutesTxt="'分钟'" :secondsTxt="'秒'"></count-down>
     <div class="list">
       <span class="listTitle">今日签到实况</span>
-      <div v-for="(info,index) in infos" :key="info">
+      <div v-for="(info,index) in infos" :key="index">
         <span>{{index+1}}</span>
         <span> {{info.name}}</span>
         <span>签到1次</span>
@@ -27,12 +27,16 @@
         天天红包
       </div>
       
-      
-      <div v-on:click="me" class="tabbarItem">
-        我的主页
-      </div>
+      <router-link to="/Me">
+
+        <div v-on:click="me" class="tabbarItem">
+          我的主页
+        </div>
+      </router-link>
         
     </footer>
+
+    
 
   </div>
 </template>
@@ -40,30 +44,34 @@
 <script>
 import axios from "axios";
 import CountDown from 'vue2-countdown'
+import { log } from 'util';
 export default {
   components: {
     CountDown
   },
   data() {
     return {
-      name: "hhp",
+      name: "444",
       btnText: "支付一元立即参与",
       money: 0,
       peopleCount: 0,
       startTime:( new Date() ).getTime(),
       currentTime:( new Date() ).getTime(),
-      endTime:1520110800000,
       infos:[],
     };
   },
-  
+  computed: {
+    endTime() {
+      return (new Date('2018-3-5 05:00:00')).getTime();
+    },
+  },
   mounted: async function get() {
+    // const self = this;
     var date = new Date();
     var month = date.getMonth() + 1;
     var day = date.getDate();
-    this.endTime = new Date('2018-3-5 00:00:00').getTime();
     // console.log(this.endTime);
-    // this.endTime = endtime;
+    // this.endtime = endtime;
     axios
       .post("/getInfo", { name: this.name, time: { month: month, day: day } })
       .then(res => {
@@ -73,6 +81,7 @@ export default {
           // console.log(res.data);
         if (haveUser == "yes"){
           this.infos = res.data.db;
+          console.log(res);
           this.btnText = "抢红包";
         }
         this.money = res.data.count;
@@ -126,19 +135,19 @@ export default {
       location.href="";
     }
   },
-  computed: {}
 };
 </script>
 
 <style>
 .contain {
   height: 100vh;
-  background-color: #fe0000;
+  /* background-color: #fe0000; */
 }
 .info {
   position: absolute;
   left: 140px;
   top: 10px;
+  z-index:10;
 }
 .infoText {
   font-size: 30px;
@@ -153,6 +162,8 @@ export default {
 .redBag {
   width: 100%;
   height: 100%;
+  position: absolute;
+  left:0;
 }
 .poenBtn {
   height: 50px;

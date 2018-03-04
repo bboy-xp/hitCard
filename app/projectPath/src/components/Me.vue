@@ -28,9 +28,11 @@
    
     <footer class="tabbar">
       
-      <div class="tabbarItem">
-        天天红包
-      </div>
+      <router-link to="/HelloFromVux">
+        <div class="tabbarItem">
+          天天红包
+        </div>
+      </router-link>
       
       
       <div class="tabbarItem">
@@ -48,7 +50,7 @@ export default {
   components: {},
   data() {
     return {
-      name: "xp",
+      name: "ft",
       input: 1,
       earn: 1,
       days: 1,
@@ -118,7 +120,8 @@ export default {
 .infoCount {
   display: inline-block;
   margin: 20px 45px 0 45px;
-  font-size: 13px;
+  font-size: 20px;
+  color: white;
 }
 .function {
   margin-top: 30px;

@@ -4,7 +4,7 @@ import Vue from 'vue'
 import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
 import App from './App'
-import Home from './components/HelloFromVux'
+import HelloFromVux from './components/HelloFromVux'
 import Me from './components/Me'
 
 Vue.use(VueRouter)
@@ -14,8 +14,8 @@ const routes = [{
   component: Me
 },
 {
-  path: '/me',
-  component: Me
+  path: '/HelloFromVux',
+  component: HelloFromVux
 }]
 
 const router = new VueRouter({

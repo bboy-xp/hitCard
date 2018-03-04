@@ -6,6 +6,7 @@ import VueRouter from 'vue-router'
 import App from './App'
 import HelloFromVux from './components/HelloFromVux'
 import Me from './components/Me'
+import Home from './components/Home'
 
 Vue.use(VueRouter)
 
@@ -16,6 +17,10 @@ const routes = [{
 {
   path: '/HelloFromVux',
   component: HelloFromVux
+},
+{
+  path: '/Home',
+  component: Home
 }]
 
 const router = new VueRouter({

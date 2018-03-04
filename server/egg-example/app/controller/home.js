@@ -35,8 +35,8 @@ class HomeController extends Controller {
       })
     })
     
-    console.log('走到这里了');
-    console.log(haveUser);
+    // console.log('走到这里了');
+    // console.log(haveUser);
     if (!haveUser) {
       var user = new User ({
         name: name,

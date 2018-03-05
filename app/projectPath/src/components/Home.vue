@@ -41,9 +41,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 }
 .joinText {
-  padding: 10px 100px;
+  width: 300px;
+  padding: 5px 0px;
   box-shadow: 5px 5px 5px #ffe4b3;
   border-radius: 10px;
   background-color: #ffc351;
@@ -53,16 +55,22 @@
   padding-top: 10px;
   color: grey;
 }
-
+.timer{
+    font-size: 14px;
+    font-family: '\9ED1\4F53'
+}
 .title {
   font-size: 20px;
   font-family: "黑体";
   font-weight: bolder;
-  margin: 20px 0 0 85px;
+  margin: 10px 0 0 105px;
   width: 150px;
 }
+.situation{
+    text-align: center;
+}
 .situationText {
-  margin: 5px 0 20px 55px;
+  /* margin: 5px 0 20px 35px; */
   font-size: 13px;
   font-family: "黑体";
 }
@@ -76,11 +84,13 @@
 .users {
   display: flex;
   justify-content: space-between;
+  margin-top: 10px;
 }
 .user {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0 25px;
 }
 .userTitle {
   margin-top: -5px;
@@ -94,6 +104,7 @@
   font-size: 11px;
 }
 .foot {
+  background-color: #f2f2f2;
   display: flex;
   justify-content: space-around;
   height: 50px;
@@ -102,6 +113,7 @@
 .tabIcon {
   height: 20px;
   margin-left: 3px;
+  margin-top: 4px;
 }
 .tabName {
   font-size: 13px;
@@ -134,7 +146,9 @@
                         挑战规则 >>
                     </div>
                 </router-link>
-                
+                <div>
+                    <count-down class="timer" v-on:start_callback="countDownS_cb(1)" v-on:end_callback="countDownE_cb(1)" :currentTime="currentTime" :startTime="startTime" :endTime="endTime" :tipText="'距离开始文字1'" :tipTextEnd="'距离结束文字1'" :endText="'结束自定义文字2'" :dayTxt="'天'" :hourTxt="'小时'" :minutesTxt="'分钟'" :secondsTxt="'秒'"></count-down>
+                </div>
             </div>
             <div class="situation">
                 <div class="todaySituation">
@@ -174,7 +188,7 @@
         <div class="foot">
             <div class="tab">
                 <img class="tabIcon" src="../../static/picture/home.png" alt="">
-                <div class="tabName">首页</div>
+                <div class="tabName Home">首页</div>
             </div>
             <div class="tab">
                 <router-link to="/My">
@@ -188,24 +202,69 @@
 </template>
 <script>
 import axios from "axios";
+import CountDown from 'vue2-countdown'
 export default {
+    components: {
+        CountDown
+    },
     data() {
         return{
-            name: 'newbility-xp',
+            name: 'feit',
             totalPeople: 1111111,
             totalMoney: 1111111,
-            successPeople: 20000,
-            failPeople: 2000,
+            successPeople: 2,
+            failPeople: 3,
             name1: 'xp',
-            name2: 'ft',
+            name2: 'feit',
             name3: 'lbn',
             hitCardTime: '05:00',
             hitCardMoney: 3,
             hitCardCount: 50,
-            btnText: '参与打卡挑战'
+            btnText: '参与打卡挑战',
+            startTime:( new Date() ).getTime(),
+            currentTime:( new Date() ).getTime(),
         }
     },
+    computed: {
+        endTime() {
+            var date = new Date();
+            var month = date.getMonth() + 1;
+            var day = date.getDate() + 1;
+            var time = (new Date('2018-'+month+'-'+day+' 05:00:00')).getTime();
+            return time;
+        },
+    },
+    mounted: async function get() {
+        var date = new Date();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        var data = {
+            name: this.name,
+            time: {
+                month: month,
+                day: day
+            }
+        }
+        axios.post('/getInfo',data).then(res => {
+            var haveUser = res.data.haveUser;
+            this.infos = res.data.db;
+            this.totalPeople = res.data.db.length;
+            this.totalMoney = res.data.db.length;
+            // console.log(haveUser);
+            if (haveUser == "yes"){
+                this.btnText = "抢红包";
+            }else{
+                this.btnText = "参与打卡挑战";
+            }
+        })
+    },
     methods: {
+        countDownS_cb: function (x) {
+        // console.log(x)
+        },
+        countDownE_cb: function (x) {
+
+        },
         join() {
             // console.log('ok');
             if (this.btnText === '参与打卡挑战') {
@@ -226,13 +285,15 @@ export default {
                     }
                 }
                 axios.post("/join",data).then(res => {
-                    if ((res.data = "ok")) {
+                    if ((res.data = "ok"||'追加完毕')) {
                         window.location.reload(); 
                     }else{
                         alert("时间还没到哦");
                     }
                 })
                 
+            }else{
+                alert("时间还没到哦");
             }
         }
     }

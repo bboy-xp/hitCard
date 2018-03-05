@@ -1,129 +1,3 @@
-<template>
-    <div class="contain">
-        <div class="head">
-            <img src="../../static/picture/bg.jpg" alt="" class="bg">
-            <div class="me">
-                <img class="myHeadPic" src="../../static/picture/head.png" alt="">
-                <div class="name">
-                    newbility-xp
-                </div>
-            </div>
-            <div class="infos">
-                <div class="info">
-                    <div class="infoTitle">我的付出(元)</div>
-                    <div class="infoCount">20</div>
-                </div>
-                <div class="info">
-                    <div class="infoTitle">我的付出(元)</div>
-                    <div class="infoCount">20</div>
-                </div>
-                <div class="info">
-                    <div class="infoTitle">我的付出(元)</div>
-                    <div class="infoCount">20</div>
-                </div>
-
-                
-            </div>
-        </div>
-        <div class="body">
-            <div class="title">战绩明细</div>
-            <div class="details">
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div><div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail">
-                    <div class="date">01-12</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-            </div>
-        </div>
-        <div class="foot">
-            <div class="tab">
-                <img class="tabIcon" src="../../static/picture/home.png" alt="">
-                <div class="tabName">首页</div>
-            </div>
-            <div class="tab">
-                <img class="tabIcon" src="../../static/picture/me.png" alt="">
-                <div class="tabName">我的</div>
-            </div>
-        </div>
-    </div>
-</template>
-<script>
-export default {};
-</script>
 <style>
     .contain{
         height: 100vh;
@@ -134,7 +8,7 @@ export default {};
     }
     .head{
         height: 200px;
-        margin-bottom: 20px;
+        
 
     }
     .bg{
@@ -172,6 +46,14 @@ export default {};
         margin: 80px 20px 0 20px;
         width: 80px;
     }
+    .infoTitle{
+        width: 100px;
+        font-size: 15px;
+    }
+    .infoCount{
+        margin-left: 25px;
+        font-size: 20px;
+    }
     .body{
         flex: 1;
         width: 100%;
@@ -200,9 +82,10 @@ export default {};
         display: flex;
         height: 50px;
         align-items: center;
+        font-size: 14px;
     }
     .date{
-        margin: 0 10px 0 20px;
+        margin: 0 10px 0 15px;
         color: #909090;
     }
     .hitCard{
@@ -228,6 +111,72 @@ export default {};
     .tabName{
         font-size: 13px;
     }
+    .Home{
+        color:hsl(202, 100%, 50%);
+    }
 </style>
 
 
+
+<template>
+    <div class="contain">
+        <div class="head">
+            <img src="../../static/picture/bg.jpg" alt="" class="bg">
+            <div class="me">
+                <img class="myHeadPic" src="../../static/picture/head.png" alt="">
+                <div class="name">
+                    {{name}}
+                </div>
+            </div>
+            <div class="infos">
+                <div class="info">
+                    <div class="infoTitle">我的付出(元)</div>
+                    <div class="infoCount">{{pay}}</div>
+                </div>
+                <div class="info">
+                    <div class="infoTitle">我的收获(元)</div>
+                    <div class="infoCount">{{harvest}}</div>
+                </div>
+                <div class="info">
+                    <div class="infoTitle">累计打卡(天)</div>
+                    <div class="infoCount">{{hitCard}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="body">
+            <div class="title">战绩明细</div>
+            <div class="details">
+                <div class="detail">
+                    <div class="date">01-12</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="foot">
+            <div class="tab">
+                <router-link to="/">
+                    <img class="tabIcon" src="../../static/picture/home.png" alt="">
+                    <div class="tabName Home">首页</div>
+                </router-link>
+            </div>
+            <div class="tab">
+                <img class="tabIcon" src="../../static/picture/me.png" alt="">
+                <div class="tabName">我的</div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+export default {
+    data() {
+        return{
+            name: "newbility-xp",
+            pay: 11,
+            harvest: 20,
+            hitCard: 11,
+        }
+    }
+};
+</script>

@@ -8,25 +8,32 @@ import HelloFromVux from './components/HelloFromVux'
 import Me from './components/Me'
 import Home from './components/Home'
 import My from './components/My'
+import Rule from './components/Rule'
+
 
 Vue.use(VueRouter)
 
 const routes = [{
   path: '/',
+  component: Home
+},
+{
+  path: '/My',
+  component: My
+},
+{
+  path: '/Rule',
+  component: Rule
+},
+{
+  path: '/Me',
   component: Me
 },
 {
   path: '/HelloFromVux',
   component: HelloFromVux
 },
-{
-  path: '/Home',
-  component: Home
-},
-{
-  path: '/My',
-  component: My
-}]
+]
 
 const router = new VueRouter({
   routes

@@ -70,13 +70,17 @@ class HomeController extends Controller {
     User.find({createTime:[{"day" : day, "month" : month, "year" : 2018}]},function(err,docs){
       info.count = docs.length;
     });
-    User.find({name:name,createTime:[{"day" : day, "month" : month, "year" : 2018}]},function(err,docs){
-      if (docs.length == 0) {
-        info.haveUser = 'no'
-      }else{
-        info.haveUser = 'yes'
-      }
+    var haveUser =await new Promise ((resolve,reject) => {
+      User.find({name:name,createTime:[{"day" : day, "month" : month, "year" : 2018}]},function(err,docs){
+        // console.log(docs);
+        if (docs.length == 0) {
+          resolve(false);
+        }else{
+          resolve(true);
+        }
+      });
     });
+    info.haveUser = haveUser;
     //查询数据库所有数据，发送给前端做排行榜
     const docs = await new Promise((resolve, reject) => {
       User.find({createTime:[{"day" : day, "month" : month, "year" : 2018}]},function(err,docs){
@@ -99,6 +103,7 @@ class HomeController extends Controller {
     })
     ctx.body = info;
   }
+  
 }
 
 module.exports = HomeController;

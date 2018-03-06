@@ -26,22 +26,76 @@
         <div class="body">
             <div class="title">战绩明细</div>
             <div class="details">
-                <div class="detail" v-for = '(info,index) in infos' :key="index">
+                <!-- <div class="detail" v-for = '(info,index) in infos' :key="index">
                     <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div> -->
+                <div class="detail">
+                    <div class="date">5-3</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail">
+                    <div class="date">5-3</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail">
+                    <div class="date">5-3</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail">
+                    <div class="date">5-3</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail">
+                    <div class="date">5-3</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail">
+                    <div class="date">5-3</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail">
+                    <div class="date">5-3</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail">
+                    <div class="date">5-3</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail">
+                    <div class="date">5-3</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail">
+                    <div class="date">5-3</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail">
+                    <div class="date">5-3</div>
                     <div class="hitCard">已打卡</div>
                     <div class="money">+1.02</div>
                 </div>
                 
-                
             </div>
         </div>
         <div class="foot">
-            <div class="tab">
-                <router-link to="/">
+            <router-link to="/">
+                <div class="tab">
                     <img class="tabIcon" src="../../static/picture/home.png" alt="">
                     <div class="tabName Home">首页</div>
-                </router-link>
-            </div>
+                </div>
+            </router-link>
             <div class="tab">
                 <img class="tabIcon" src="../../static/picture/me.png" alt="">
                 <div class="tabName My">我的</div>
@@ -149,7 +203,7 @@ export default {
         background-color: #eeeeee;
         width: 100%;
     }
-    .detailS{
+    .details{
         overflow: scroll;
     }
     .detail{

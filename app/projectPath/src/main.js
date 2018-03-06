@@ -24,15 +24,8 @@ const routes = [{
 {
   path: '/Rule',
   component: Rule
-},
-{
-  path: '/Me',
-  component: Me
-},
-{
-  path: '/HelloFromVux',
-  component: HelloFromVux
-},
+}
+
 ]
 
 const router = new VueRouter({

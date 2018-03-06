@@ -1,4 +1,4 @@
-<style>
+<style scoped>
 .contain {
   height: 100vh;
   width: 100vw;
@@ -195,7 +195,6 @@
                     <img class="tabIcon" src="../../static/picture/me.png" alt="">
                     <div class="tabName My">我的</div>
                 </router-link>
-                
             </div>
         </div>
     </div>
@@ -236,6 +235,7 @@ export default {
         },
     },
     mounted: async function get() {
+        console.log(1)
         var date = new Date();
         var month = date.getMonth() + 1;
         var day = date.getDate();

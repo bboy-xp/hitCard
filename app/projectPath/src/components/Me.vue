@@ -84,7 +84,7 @@ export default {
 };
 </script>
 
-<style>
+<style scpoed>
 .contain {
   height: 100vh;
   

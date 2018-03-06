@@ -1,3 +1,112 @@
+<template>
+    <div class="contain">
+        <div class="head">
+            <img src="../../static/picture/bg.jpg" alt="" class="bg">
+            <div class="me">
+                <img class="myHeadPic" src="../../static/picture/head.png" alt="">
+                <div class="name">
+                    {{name}}
+                </div>
+            </div>
+            <div class="infos">
+                <div class="info">
+                    <div class="infoTitle">我的付出(元)</div>
+                    <div class="infoCount">{{pay}}</div>
+                </div>
+                <div class="info">
+                    <div class="infoTitle">我的收获(元)</div>
+                    <div class="infoCount">{{harvest}}</div>
+                </div>
+                <div class="info">
+                    <div class="infoTitle">累计打卡(天)</div>
+                    <div class="infoCount">{{hitCard}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="body">
+            <div class="title">战绩明细</div>
+            <div class="details">
+                <div class="detail" v-for = '(info,index) in infos' :key="index">
+                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail" v-for = '(info,index) in infos' :key="index">
+                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail" v-for = '(info,index) in infos' :key="index">
+                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail" v-for = '(info,index) in infos' :key="index">
+                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail" v-for = '(info,index) in infos' :key="index">
+                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail" v-for = '(info,index) in infos' :key="index">
+                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail" v-for = '(info,index) in infos' :key="index">
+                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                <div class="detail" v-for = '(info,index) in infos' :key="index">
+                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
+                    <div class="hitCard">已打卡</div>
+                    <div class="money">+1.02</div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="foot">
+            <div class="tab">
+                <router-link to="/">
+                    <img class="tabIcon" src="../../static/picture/home.png" alt="">
+                    <div class="tabName Home">首页</div>
+                </router-link>
+            </div>
+            <div class="tab">
+                <img class="tabIcon" src="../../static/picture/me.png" alt="">
+                <div class="tabName My">我的</div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+import axios from "axios";
+export default {
+    data() {
+        return{
+            name: "newbility-xp",
+            pay: 0,
+            harvest: 0,
+            hitCard: 0,
+            infos:[]
+        }
+    },
+    mounted: async function(){
+        axios.post("/meGetInfo",{name: this.name}).then(res => {
+            this.pay = res.data[0].createTime.length;
+            //这里需要修改，将打卡的情况也加入数据库里，在这里渲染
+            this.harvest = res.data[0].createTime.length;
+            this.hitCard = res.data[0].createTime.length;
+            this.infos = res.data;
+        })
+    }
+};
+</script>
+
 <style>
     .contain{
         height: 100vh;
@@ -117,114 +226,3 @@
     }
     
 </style>
-
-
-
-<template>
-    <div class="contain">
-        <div class="head">
-            <img src="../../static/picture/bg.jpg" alt="" class="bg">
-            <div class="me">
-                <img class="myHeadPic" src="../../static/picture/head.png" alt="">
-                <div class="name">
-                    {{name}}
-                </div>
-            </div>
-            <div class="infos">
-                <div class="info">
-                    <div class="infoTitle">我的付出(元)</div>
-                    <div class="infoCount">{{pay}}</div>
-                </div>
-                <div class="info">
-                    <div class="infoTitle">我的收获(元)</div>
-                    <div class="infoCount">{{harvest}}</div>
-                </div>
-                <div class="info">
-                    <div class="infoTitle">累计打卡(天)</div>
-                    <div class="infoCount">{{hitCard}}</div>
-                </div>
-            </div>
-        </div>
-        <div class="body">
-            <div class="title">战绩明细</div>
-            <div class="details">
-                <div class="detail" v-for = '(info,index) in infos'>
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail" v-for = '(info,index) in infos'>
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail" v-for = '(info,index) in infos'>
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail" v-for = '(info,index) in infos'>
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail" v-for = '(info,index) in infos'>
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail" v-for = '(info,index) in infos'>
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail" v-for = '(info,index) in infos'>
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail" v-for = '(info,index) in infos'>
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                
-            </div>
-        </div>
-        <div class="foot">
-            <div class="tab">
-                <router-link to="/">
-                    <img class="tabIcon" src="../../static/picture/home.png" alt="">
-                    <div class="tabName Home">首页</div>
-                </router-link>
-            </div>
-            <div class="tab">
-                <img class="tabIcon" src="../../static/picture/me.png" alt="">
-                <div class="tabName My">我的</div>
-            </div>
-        </div>
-    </div>
-</template>
-<script>
-import axios from "axios";
-export default {
-    data() {
-        return{
-            name: "newbility-xp",
-            pay: 0,
-            harvest: 0,
-            hitCard: 0,
-            infos:[]
-        }
-    },
-    mounted: async function(){
-        axios.post("/meGetInfo",{name: this.name}).then(res => {
-            this.pay = res.data[0].createTime.length;
-            //这里需要修改，将打卡的情况也加入数据库里，在这里渲染
-            this.harvest = res.data[0].createTime.length;
-            this.hitCard = res.data[0].createTime.length;
-            this.infos = res.data;
-        })
-    }
-};
-</script>

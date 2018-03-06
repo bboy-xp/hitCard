@@ -81,7 +81,7 @@ export default {
   },
   data() {
     return {
-      name: "lbn",
+      name: "newbility-xp",
       totalPeople: 1111111,
       totalMoney: 1111111,
       successPeople: 2,
@@ -108,7 +108,6 @@ export default {
     }
   },
   mounted: async function get() {
-    console.log(1);
     var date = new Date();
     var month = date.getMonth() + 1;
     var day = date.getDate();

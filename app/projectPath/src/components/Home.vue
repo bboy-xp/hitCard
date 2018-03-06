@@ -209,7 +209,7 @@ export default {
     },
     data() {
         return{
-            name: 'feit',
+            name: 'gaomin',
             totalPeople: 1111111,
             totalMoney: 1111111,
             successPeople: 2,
@@ -223,6 +223,7 @@ export default {
             btnText: '参与打卡挑战',
             startTime:( new Date() ).getTime(),
             currentTime:( new Date() ).getTime(),
+            openRedBag:false,
         }
     },
     computed: {
@@ -250,9 +251,9 @@ export default {
             this.infos = res.data.db;
             this.totalPeople = res.data.db.length;
             this.totalMoney = res.data.db.length;
-            // console.log(haveUser);
+            console.log(haveUser);
             if (haveUser == "yes"){
-                this.btnText = "抢红包";
+                this.btnText = "签到";
             }else{
                 this.btnText = "参与打卡挑战";
             }
@@ -260,13 +261,13 @@ export default {
     },
     methods: {
         countDownS_cb: function (x) {
-        // console.log(x)
+        console.log("计时开始")
         },
         countDownE_cb: function (x) {
-
+        console.log("计时结束");
+        this.openRedBag = true;
         },
         join() {
-            // console.log('ok');
             if (this.btnText === '参与打卡挑战') {
                 alert('支付成功,参与挑战');
                 var date = new Date();
@@ -285,15 +286,16 @@ export default {
                     }
                 }
                 axios.post("/join",data).then(res => {
-                    if ((res.data = "ok"||'追加完毕')) {
+                    console.log(res.data);
+                    if ((res.data = "ok")) {
                         window.location.reload(); 
-                    }else{
-                        alert("时间还没到哦");
                     }
                 })
                 
+            }else if (this.btnText === '签到'&&this.openRedBag) {
+                alert('签到成功');
             }else{
-                alert("时间还没到哦");
+                alert('时间还没到哦');
             }
         }
     }

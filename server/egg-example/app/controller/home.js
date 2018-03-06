@@ -26,7 +26,6 @@ class HomeController extends Controller {
         }
       })
     })
-    
     if (!haveUser) {
       var user = new User ({
         name: name,
@@ -40,8 +39,22 @@ class HomeController extends Controller {
       user.save();
       ctx.body = 'ok';
     } else {
-      User.update({name:name},{"$addToSet":{"createTime": {"year":"year","month":"month","day":"day"}}})
-      ctx.body = '追加完毕';
+      User.update({
+        name: name
+      },{
+        $push:{
+          createTime: {
+            day: day,
+            month: month,
+            year: year,
+          }
+        }
+      },(err) => {
+        if (!!err) {
+          console.log('mongoose更新数据报错'+err);
+        }
+      })
+      ctx.body = 'ok';
     }
 
   }
@@ -56,8 +69,6 @@ class HomeController extends Controller {
     //注意Model.find查询数据库时回掉函数有顺序，先err后docs
     User.find({createTime:[{"day" : day, "month" : month, "year" : 2018}]},function(err,docs){
       info.count = docs.length;
-      
-      
     });
     User.find({name:name,createTime:[{"day" : day, "month" : month, "year" : 2018}]},function(err,docs){
       if (docs.length == 0) {

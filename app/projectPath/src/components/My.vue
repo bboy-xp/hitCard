@@ -31,41 +31,7 @@
                     <div class="hitCard">已打卡</div>
                     <div class="money">+1.02</div>
                 </div>
-                <div class="detail" v-for = '(info,index) in infos' :key="index">
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail" v-for = '(info,index) in infos' :key="index">
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail" v-for = '(info,index) in infos' :key="index">
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail" v-for = '(info,index) in infos' :key="index">
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail" v-for = '(info,index) in infos' :key="index">
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail" v-for = '(info,index) in infos' :key="index">
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
-                <div class="detail" v-for = '(info,index) in infos' :key="index">
-                    <div class="date">{{info.createTime[index].month}}-{{info.createTime[index].day}}</div>
-                    <div class="hitCard">已打卡</div>
-                    <div class="money">+1.02</div>
-                </div>
+                
                 
             </div>
         </div>

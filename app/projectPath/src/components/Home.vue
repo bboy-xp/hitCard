@@ -118,13 +118,13 @@ export default {
         day: day
       }
     };
+    //这里用time_range方法判断签到时间是否在早八点到五点
     this.openRedBag = this.time_range('05:00','08:00');
     axios.post("/getInfo", data).then(res => {
       var haveUser = res.data.haveUser;
       this.infos = res.data.db;
       this.totalPeople = res.data.db.length;
       this.totalMoney = res.data.db.length;
-      console.log(haveUser);
       if (haveUser) {
         this.btnText = "签到";
       } else {
@@ -158,13 +158,36 @@ export default {
           }
         };
         axios.post("/join", data).then(res => {
-          console.log(res.data);
           if ((res.data = "ok")) {
             window.location.reload();
           }
         });
       } else if (this.btnText === "签到" && this.openRedBag) {
-        alert("签到成功");
+        // alert("签到成功,明天再接再厉!");
+        var now = new Date();  
+        var year = now.getFullYear();       //年  
+        var month = now.getMonth() + 1;     //月  
+        var day = now.getDate();            //日  
+        var h = now.getHours();            //时  
+        var m = now.getMinutes();          //分 
+        var data = {
+          name: this.name,
+          year: year,
+          month: month,
+          day: day,
+          hour: h,
+          minute: m,
+        }
+        axios.post('/successHitCard',data).then(res => {
+          console.log(res.data);
+          if (res.data == "ok") {
+            alert("签到成功,明天再接再厉!");
+            this.btnText = "参与打卡挑战";
+          }else{
+            alert(res.data);
+          }
+        })
+        
       } else {
         alert("时间还没到哦");
       }

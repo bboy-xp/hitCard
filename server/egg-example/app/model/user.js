@@ -3,7 +3,8 @@ module.exports = app => {
     const UserSchema = new mongoose.Schema({
       name: { type: String },
       money: { type: Number },
-      createTime: { type: Array }
+      createTime: { type: Array },
+      hitCard: {type: Array},
     });
   
     return mongoose.model('User', UserSchema);

@@ -9,4 +9,5 @@ module.exports = app => {
   router.post('/join', controller.home.join);
   router.post('/getInfo', controller.home.getInfo);
   router.post('/meGetInfo', controller.home.meGetInfo);
+  router.post('/successHitCard', controller.home.successHitCard);
 };

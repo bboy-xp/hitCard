@@ -34,7 +34,8 @@ class HomeController extends Controller {
           year: year,
           month: month,
           day: day
-        }]
+        }],
+        hitCard: []
       })
       user.save();
       ctx.body = 'ok';
@@ -67,12 +68,15 @@ class HomeController extends Controller {
     var info = {};
     var User = ctx.model.User;
     //注意Model.find查询数据库时回掉函数有顺序，先err后docs
-    User.find({createTime:[{"day" : day, "month" : month, "year" : 2018}]},function(err,docs){
-      info.count = docs.length;
-    });
+    //查询今天支付总人数
+    info.db = await new Promise ((resolve,reject) => {
+      User.find({createTime:{"day" : day, "month" : month, "year" : 2018}},function(err,docs){
+        resolve(docs);
+      });
+    })
+    // 查询用户是否已支付
     var haveUser =await new Promise ((resolve,reject) => {
-      User.find({name:name,createTime:[{"day" : day, "month" : month, "year" : 2018}]},function(err,docs){
-        // console.log(docs);
+      User.find({name:name,createTime:{"day" : day, "month" : month, "year" : 2018}},function(err,docs){
         if (docs.length == 0) {
           resolve(false);
         }else{
@@ -81,13 +85,13 @@ class HomeController extends Controller {
       });
     });
     info.haveUser = haveUser;
-    //查询数据库所有数据，发送给前端做排行榜
+    //查询数据库今天成功签到的情况
     const docs = await new Promise((resolve, reject) => {
-      User.find({createTime:[{"day" : day, "month" : month, "year" : 2018}]},function(err,docs){
+      User.find({hitCard:{"day" : day, "month" : month, "year" : 2018}},function(err,docs){
         resolve(docs)
       }); 
     })
-    info.db = docs;
+    console.log(docs);
     ctx.body = info;
   }
   async meGetInfo () {
@@ -103,7 +107,81 @@ class HomeController extends Controller {
     })
     ctx.body = info;
   }
-  
+  async successHitCard () {
+    const ctx = this.ctx;
+    var data = ctx.request.body;
+    // console.log(data);
+    var User = ctx.model.User;
+    var haveUser = await new Promise((resolve,reject) => {
+      User.find({name: data.name},function (err,docs) {
+        if (docs.length !== 0) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }     
+      })
+    });
+    // console.log(data.hour);
+
+    var time_range = function (beginTime, endTime, nowTime) {
+      var strb = beginTime.split (":");
+      if (strb.length != 2) {
+        return false;
+      }
+     
+      var stre = endTime.split (":");
+      if (stre.length != 2) {
+        return false;
+      }
+     
+      var strn = nowTime.split (":");
+      if (stre.length != 2) {
+        return false;
+      }
+      var b = new Date ();
+      var e = new Date ();
+      var n = new Date ();
+     
+      b.setHours (strb[0]);
+      b.setMinutes (strb[1]);
+      e.setHours (stre[0]);
+      e.setMinutes (stre[1]);
+      n.setHours (strn[0]);
+      n.setMinutes (strn[1]);
+     
+      if (n.getTime () - b.getTime () > 0 && n.getTime () - e.getTime () < 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    var nowTime = String(data.hour +':'+data.minute);
+    var canOpenRedBag = time_range("05:00", "08:00", nowTime);
+    var message;
+    //后端判断是否数据库里有用户，和用户从前端发过来的时间是否符合时间段
+    if(haveUser&&canOpenRedBag){
+      User.update({name: data.name},{
+        $push: {
+          hitCard: {
+            minute: data.minute,
+            hour: data.hour,
+            day: data.day,
+            month: data.month,
+            year: data.year
+          }
+        }
+      },{upsert:true,multi:true},(err) => {
+        if(!!err){
+          console.log(err);
+        }else{
+          message = "ok";
+        }
+      })
+    }else{
+      message = "改了前端代码么，哼哼";
+    }
+    ctx.body = message;
+  }
 }
 
 module.exports = HomeController;

@@ -166,7 +166,7 @@ class HomeController extends Controller {
       }
     }
     var nowTime = String(data.hour +':'+data.minute);
-    var canOpenRedBag = time_range("05:00", "24:00", nowTime);
+    var canOpenRedBag = time_range("05:00", "08:00", nowTime);
     var message;
     //后端判断是否数据库里有用户，和用户从前端发过来的时间是否符合时间段
     if(haveUser&&canOpenRedBag){

@@ -75,13 +75,14 @@
 <script>
 import axios from "axios";
 import CountDown from "vue2-countdown";
+import { format } from 'url';
 export default {
   components: {
     CountDown
   },
   data() {
     return {
-      name: "newbility-xp",
+      name: "feit",
       totalPeople: 1111111,
       totalMoney: 1111111,
       successPeople: 2,
@@ -90,7 +91,7 @@ export default {
       name2: "feit",
       name3: "lbn",
       hitCardTime: "05:00",
-      hitCardMoney: 3,
+      hitCardMoney: '需要修改',
       hitCardCount: 50,
       btnText: "参与打卡挑战",
       startTime: new Date().getTime(),
@@ -119,9 +120,9 @@ export default {
       }
     };
     //这里用time_range方法判断签到时间是否在早八点到五点
-    this.openRedBag = this.time_range('05:00','24:00');
+    this.openRedBag = this.time_range('05:00','08:00');
     axios.post("/getInfo", data).then(res => {
-      console.log(res);
+      console.log(res.data);
       var haveUser = res.data.haveUser;
       this.infos = res.data.todayJoinDocs;
       this.totalPeople = res.data.todayJoinDocs.length;
@@ -132,7 +133,34 @@ export default {
         this.btnText = "签到";
       } else {
         this.btnText = "参与打卡挑战";
-      }
+      };
+
+      // 开始写早起之星逻辑
+      var hitCardDocs = res.data.hitCardDocs;
+      var minTime = 7000;
+      console.log(hitCardDocs);
+      hitCardDocs.forEach(element => {
+        if (String(element.hitCard[0].minute).length == 1) {
+          element.hitCard[0].minute.length = '0'+element.hitCard[0].minute.length;
+        }
+        var str1 = String(element.hitCard[0].hour);
+        var str2 = String(element.hitCard[0].minute);
+        var needFormatTime = str1 + str2;
+        var formatTime = parseInt(needFormatTime);
+        // 获取到最小的时间
+        minTime = Math.min(formatTime,minTime);
+      });
+      if(String(minTime).length == 3){
+        var str1 = String(minTime).substr(0,1);
+        var str2 = String(minTime).substr(1,2);
+        this.hitCardTime = str1 + ':' + str2;
+      }else if (String(minTime).length == 4) {
+        var str1 = String(minTime).substr(0,2);
+        var str2 = String(minTime).substr(2,2);
+        this.hitCardTime = str1 + ':' + str2;
+      };
+      // 开始写毅力之星的逻辑
+
     });
   },
   methods: {
@@ -216,7 +244,8 @@ export default {
       } else {
         return false;
       }
-    }
+    },
+    
   }
 };
 </script>

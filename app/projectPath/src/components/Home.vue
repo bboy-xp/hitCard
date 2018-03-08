@@ -138,7 +138,6 @@ export default {
       // 开始写早起之星逻辑
       var hitCardDocs = res.data.hitCardDocs;
       var minTime = 7000;
-      console.log(hitCardDocs);
       hitCardDocs.forEach(element => {
         if (String(element.hitCard[0].minute).length == 1) {
           element.hitCard[0].minute.length = '0'+element.hitCard[0].minute.length;
@@ -160,7 +159,21 @@ export default {
         this.hitCardTime = str1 + ':' + str2;
       };
       // 开始写毅力之星的逻辑
-
+      
+      var maxCount = 0;
+      var maxCountName = '';
+      hitCardDocs.forEach(element => {
+        if (element.hitCard.length > maxCount) {
+          maxCount = element.hitCard.length;
+          maxCountName = element.name;
+        }else{
+          maxCount = maxCount;
+        }
+      });
+      console.log(maxCount,maxCountName);
+      this.name3 = maxCountName;
+      this.hitCardCount = maxCount;
+      // 开始写运气之星的逻辑
     });
   },
   methods: {

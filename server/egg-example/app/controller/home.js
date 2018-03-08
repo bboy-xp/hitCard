@@ -91,7 +91,6 @@ class HomeController extends Controller {
         resolve(docs)
       }); 
     })
-    console.log(docs);
     ctx.body = info;
   }
   async meGetInfo () {
@@ -110,7 +109,6 @@ class HomeController extends Controller {
   async successHitCard () {
     const ctx = this.ctx;
     var data = ctx.request.body;
-    // console.log(data);
     var User = ctx.model.User;
     var haveUser = await new Promise((resolve,reject) => {
       User.find({name: data.name},function (err,docs) {
@@ -121,7 +119,6 @@ class HomeController extends Controller {
         }     
       })
     });
-    // console.log(data.hour);
 
     var time_range = function (beginTime, endTime, nowTime) {
       var strb = beginTime.split (":");
@@ -160,22 +157,24 @@ class HomeController extends Controller {
     var message;
     //后端判断是否数据库里有用户，和用户从前端发过来的时间是否符合时间段
     if(haveUser&&canOpenRedBag){
-      User.update({name: data.name},{
-        $push: {
-          hitCard: {
-            minute: data.minute,
-            hour: data.hour,
-            day: data.day,
-            month: data.month,
-            year: data.year
+      message = await new Promise((resolve,reject) => {
+        User.update({name: data.name},{
+          $push: {
+            hitCard: {
+              minute: data.minute,
+              hour: data.hour,
+              day: data.day,
+              month: data.month,
+              year: data.year
+            }
           }
-        }
-      },{upsert:true,multi:true},(err) => {
-        if(!!err){
-          console.log(err);
-        }else{
-          message = "ok";
-        }
+        },{upsert:true,multi:true},(err) => {
+          if(!!err){
+            reject(err);
+          }else{
+            resolve("ok");
+          }
+        })
       })
     }else{
       message = "改了前端代码么，哼哼";

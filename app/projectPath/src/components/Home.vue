@@ -119,7 +119,7 @@ export default {
       }
     };
     //这里用time_range方法判断签到时间是否在早八点到五点
-    this.openRedBag = this.time_range('05:00','08:00');
+    this.openRedBag = this.time_range('05:00','24:00');
     axios.post("/getInfo", data).then(res => {
       var haveUser = res.data.haveUser;
       this.infos = res.data.db;
@@ -179,7 +179,6 @@ export default {
           minute: m,
         }
         axios.post('/successHitCard',data).then(res => {
-          console.log(res.data);
           if (res.data == "ok") {
             alert("签到成功,明天再接再厉!");
             this.btnText = "参与打卡挑战";

@@ -69,7 +69,7 @@ class HomeController extends Controller {
     var User = ctx.model.User;
     //注意Model.find查询数据库时回掉函数有顺序，先err后docs
     //查询今天支付总人数
-    info.db = await new Promise ((resolve,reject) => {
+    info.todayJoinDocs = await new Promise ((resolve,reject) => {
       User.find({createTime:{"day" : day, "month" : month, "year" : 2018}},function(err,docs){
         resolve(docs);
       });
@@ -86,11 +86,24 @@ class HomeController extends Controller {
     });
     info.haveUser = haveUser;
     //查询数据库今天成功签到的情况
-    const docs = await new Promise((resolve, reject) => {
-      User.find({hitCard:{"day" : day, "month" : month, "year" : 2018}},function(err,docs){
+    var hitCardDocs = await new Promise((resolve, reject) => {
+      User.find({hitCard:{
+        $elemMatch:{
+          day:day,
+          month:month
+        }
+      }},function(err,docs){
         resolve(docs)
       }); 
+    });
+    info.hitCardDocs = hitCardDocs;
+    //查询昨天的参与挑战的情况
+    var yesterdayJoinDocs = await new Promise((resolve,reject) => {
+      User.find({createTime:{"day" : day-1, "month" : month, "year" : 2018}},(err,docs) => {
+        resolve(docs);
+      })
     })
+    info.yesterdayJoinDocs = yesterdayJoinDocs;
     ctx.body = info;
   }
   async meGetInfo () {
@@ -153,7 +166,7 @@ class HomeController extends Controller {
       }
     }
     var nowTime = String(data.hour +':'+data.minute);
-    var canOpenRedBag = time_range("05:00", "08:00", nowTime);
+    var canOpenRedBag = time_range("05:00", "24:00", nowTime);
     var message;
     //后端判断是否数据库里有用户，和用户从前端发过来的时间是否符合时间段
     if(haveUser&&canOpenRedBag){

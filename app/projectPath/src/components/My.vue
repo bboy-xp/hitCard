@@ -27,7 +27,7 @@
             <div class="title">战绩明细</div>
             <div class="details">
                 <div class="detail" v-for = '(info,index) in infos' :key="index">
-                    <div class="date">{{info.hitCard[index].month}}-{{info.hitCard[index].day}}</div>
+                    <div class="date">{{info.month}}-{{info.day}}</div>
                     <div class="hitCard">已打卡</div>
                     <div class="money">+1.02</div>
                 </div>
@@ -62,12 +62,12 @@ export default {
     },
     mounted: async function(){
         axios.post("/meGetInfo",{name: this.name}).then(res => {
-            console.log(res);
-            this.pay = res.data[0].hitCard.length;
+            console.log(res.data[0].hitCard[0].day);
+            this.pay = res.data[0].createTime.length;
             //这里需要修改，将打卡的情况也加入数据库里，在这里渲染
             this.harvest = '需要修改';
             this.hitCard = res.data[0].hitCard.length;
-            this.infos = res.data;
+            this.infos = res.data[0].hitCard;
         })
     }
 };

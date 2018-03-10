@@ -122,7 +122,7 @@ export default {
     //这里用time_range方法判断签到时间是否在早八点到五点
     this.openRedBag = this.time_range('05:00','08:00');
     axios.post("/getInfo", data).then(res => {
-      console.log(res.data);
+      console.log(res);
       var haveUser = res.data.haveUser;
       this.infos = res.data.todayJoinDocs;
       this.totalPeople = res.data.todayJoinDocs.length;
@@ -134,6 +134,8 @@ export default {
       } else {
         this.btnText = "参与打卡挑战";
       };
+
+      this.btnText = "参与打卡挑战";
 
       // 开始写早起之星逻辑
       var hitCardDocs = res.data.hitCardDocs;

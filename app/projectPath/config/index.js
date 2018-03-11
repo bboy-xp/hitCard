@@ -26,6 +26,10 @@ module.exports = {
       '/successHitCard': {
         target: 'http://127.0.0.1:7001',
         changeOrigin: 'true',
+      },
+      '/getMoney': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: 'true',
       }
     },
 

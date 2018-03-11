@@ -10,4 +10,6 @@ module.exports = app => {
   router.post('/getInfo', controller.home.getInfo);
   router.post('/meGetInfo', controller.home.meGetInfo);
   router.post('/successHitCard', controller.home.successHitCard);
+  router.post('/getMoney', controller.home.getMoney);
+
 };

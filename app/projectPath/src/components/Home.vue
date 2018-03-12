@@ -83,7 +83,7 @@ export default {
   },
   data() {
     return {
-      name: "yfc",
+      name: "feit",
       totalPeople: 1111111,
       totalMoney: 1111111,
       successPeople: 2,
@@ -138,20 +138,24 @@ export default {
     //这里用time_range方法判断签到时间是否在早八点到五点
     this.openRedBag = this.time_range('05:00','24:00');
     //用time_range方法判断参与时间是否符合时间，
-    this.canJoin = this.time_range('00:00','05:00');
-    axios.post("/getInfo", data).then(res => {
-      console.log(res);
-      var haveUser = res.data.haveUser;
-    //   this.infos = res.data.todayJoinDocs;
-      this.totalPeople = res.data.todayJoinCount;
-      this.totalMoney = res.data.todayJoinCount;
+    this.canJoin = this.time_range('08:00','23:50');
+    var info = await new Promise((resolve,reject) => {
+      axios.post("/getInfo", data).then(res => {
+        console.log(res);
+        resolve(res.data);
+      });
+    })
+    //   var haveUser = res.data.todayHaveUser;
+    // //   this.infos = res.data.todayJoinDocs;
+    //   this.totalPeople = res.data.todayJoinCount;
+    //   this.totalMoney = res.data.todayJoinCount;
     //   this.successPeople = res.data.hitCardDocs.length;
     //   this.failPeople = res.data.yesterdayJoinDocs.length - res.data.hitCardDocs.length;
-      if (haveUser) {
-        this.btnText = "签到";
-      } else {
-        this.btnText = "参与打卡挑战";
-      };
+      // if (haveUser) {
+      //   this.btnText = "签到";
+      // } else {
+      //   this.btnText = "参与打卡挑战";
+      // };
 
       // this.btnText = "参与打卡挑战";
 
@@ -194,7 +198,25 @@ export default {
       // this.name3 = maxCountName;
       // this.hitCardCount = maxCount;
       // // 开始写运气之星的逻辑
-    });
+    
+    var now = new Date();
+    var hour = now.getHours();
+    //判断时间在八点的前后
+    console.log(info.todayHaveUser);
+    if(hour>=8){
+      console.log('走到这里啦'); 
+      if (info.todayHaveUser) {
+        this.btnText = '签到'
+      }else{
+        this.btnText = '参与打卡挑战' 
+      }
+    }else{
+      if (info.yesterdayHaveUser) {
+        this.btnText ='签到'
+      }else{
+        this.btnText = '参与打卡挑战'
+      }
+    }
   },
   methods: {
     countDownS_cb: function(x) {
@@ -204,7 +226,7 @@ export default {
       console.log("计时结束");
     },
     join() {
-      if (this.btnText === "参与打卡挑战"&&canJoin) {
+      if (this.btnText === "参与打卡挑战"&&this.canJoin) {
         alert("支付成功,参与挑战");
         var data = {
           info: {

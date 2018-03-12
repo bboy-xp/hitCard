@@ -83,6 +83,7 @@ class HomeController extends Controller {
     var name = ctx.request.body.name;
     var info = {};
     var User = ctx.model.User;
+    var Record = ctx.model.Record;
     //注意Model.find查询数据库时回掉函数有顺序，先err后docs
     //查询今天支付总人数
     info.todayJoinCount = await new Promise((resolve, reject) => {
@@ -130,27 +131,28 @@ class HomeController extends Controller {
     });
     info.yesterdayHaveUser = yesterdayHaveUser;
 
-  //   //查询数据库今天成功签到的情况
-  //   var hitCardDocs = await new Promise((resolve, reject) => {
-  //     User.find({
-  //       hitCard: {
-  //         $elemMatch: {
-  //           day: day,
-  //           month: month
-  //         }
-  //       }
-  //     }, function (err, docs) {
-  //       resolve(docs)
-  //     });
-  //   });
-  //   info.hitCardDocs = hitCardDocs;
-  //   //查询昨天的参与挑战的情况
-  //   var yesterdayJoinDocs = await new Promise((resolve, reject) => {
-  //     User.find({ createTime: { "day": day - 1, "month": month, "year": 2018 } }, (err, docs) => {
-  //       resolve(docs);
-  //     })
-  //   })
-  //   info.yesterdayJoinDocs = yesterdayJoinDocs;
+    //查询数据库今天成功签到的情况
+    var hitCardDocs = await new Promise((resolve, reject) => {
+      Record.find({
+        hitCard: {
+          $gte: nowday,
+          $lt: now
+        }
+      }, function (err, docs) {
+        resolve(docs)
+      });
+    });
+    info.hitCardDocs = hitCardDocs;
+    //查询昨天的参与挑战的情况
+    var yesterdayJoinCount = await new Promise((resolve, reject) => {
+      User.find({ createTime: {
+        $gte: aDayAgo,
+        $lt: nowday
+      } }, (err, docs) => {
+        resolve(docs);
+      })
+    })
+    info.yesterdayJoinCount = yesterdayJoinCount;
     ctx.body = info;
   }
   async meGetInfo() {
@@ -209,7 +211,6 @@ class HomeController extends Controller {
     var canOpenRedBag = time_range("05:00", "24:00", nowTime);
     var message;
     //计算的查询日期
-    
     const nowDate = now.getDate();
     const nowMonth = now.getMonth();
     const nowYear = now.getFullYear();
@@ -217,17 +218,7 @@ class HomeController extends Controller {
     const aDayAgo = new Date(nowYear,nowMonth,nowDate - 1);
     //后端判断是否数据库里有用户，和用户从前端发过来的时间是否符合时间段
     if (canOpenRedBag) {
-    //   message = await new Promise((resolve, reject) => {
-    //     User.update({ name: data.name }, {
-    //       hitCard: now
-    //  }, { upsert: true, multi: true }, (err) => {
-    //       if (!!err) {
-    //         reject(err);
-    //       } else {
-    //         resolve("ok");
-    //       }
-    //     })
-    //   })
+    
       var haveUser = await new Promise((resolve,reject) => {
         User.find({
           name:data.name,hitCard: {
@@ -242,13 +233,21 @@ class HomeController extends Controller {
           }
         })
       });
+      // console.log(data);
+      //对更新进行测试
+      // var test = await new Promise((resolve,reject) => {
+      //   User.find({
+      //     name: data.name,
+          
+      //   },(err,docs) => {
+      //     resolve(docs);
+      //   })
+      // });
+      // console.log(test);
       if(!haveUser){
         // 更新user表
         var userUpdateMessage = await new Promise((resolve,reject) => {
-          User.update({name: data.name,createTime: {
-            $gte: aDayAgo,
-            $lt: nowday,
-          }},{
+          User.update({name: data.name},{
             hitCard:now,
           },(err) => {
             if(!err){
@@ -258,12 +257,14 @@ class HomeController extends Controller {
             }
           })
         });
+        // console.log(userUpdateMessage);
         // 更新record流水表
         var recordUpdateMessage = await new Promise((resolve,reject) => {
           User.update({name: data.name,createTime: {
             $gte: aDayAgo,
             $lt: nowday,
           }},{
+            hitCardTime: now,
             use: true
           },(err) => {
             if(!err){
@@ -286,52 +287,62 @@ class HomeController extends Controller {
     } else {
       message = "改了前端代码么，哼哼";
     }
-    console.log(message);
+    // console.log(message);
     ctx.body = message;
   }
   async getMoney() {
     const ctx = this.ctx;
-  //   var data = ctx.request.body;
-  //   var User = ctx.model.User;
-  //   // 查询昨天的参与人数
-  //   var yesterdayJoinCount = await new Promise((resolve, reject) => {
-  //     User.find({ createTime: { "day": data.day - 1, "month": data.month, "year": 2018 } }, (err, docs) => {
-  //       resolve(docs.length);
-  //     })
-  //   })
-  //   // 查询今天的签到人数
-  //   var hitCardCount = await new Promise((resolve, reject) => {
-  //     User.find({
-  //       hitCard: {
-  //         $elemMatch: {
-  //           day: data.day,
-  //           month: data.month
-  //         }
-  //       }
-  //     }, function (err, docs) {
-  //       resolve(docs.length);
-  //     });
-  //   });
-  //   // 红包分配
-  //   var totalMoney = yesterdayJoinCount - hitCardCount;
-  //   var people = hitCardCount;
-  //   function rp(total, n) {
-  //     var remain = total
-  //     var ret = []
-  //     for (let i = 0; i < n - 1; i++) {
-  //       let m = Math.ceil(Math.random() * 100 * (remain - (n - (i + 1)) * 0.01)) / 100
-  //       ret.push(m)
-  //       remain -= m
-  //     }
-  //     ret.push(Number(remain.toFixed(2)))
-  //     return ret
-  //   }
-  //   var redBagArr = rp(totalMoney, people);
-  //   for (let i = 0; i < redBagArr.length; i++) {
-  //     redBagArr[i] += 1;
-  //     redBagArr[i] = redBagArr[i].toFixed(2);
-  //   }
-  //   console.log(redBagArr);
+    var data = ctx.request.body;
+    var User = ctx.model.User;
+    var Record = ctx.model.Record;
+    //计算的查询日期
+    const now = new Date();
+    const nowDate = now.getDate();
+    const nowMonth = now.getMonth();
+    const nowYear = now.getFullYear();
+    const nowday = new Date(nowYear,nowMonth,nowDate - 0);
+    const aDayAgo = new Date(nowYear,nowMonth,nowDate - 1);
+    // 查询昨天的参与人数
+    var yesterdayJoinCount = await new Promise((resolve, reject) => {
+      User.find({createTime: {
+        $gte:aDayAgo,
+        $lt: nowday
+      }}, (err, docs) => {
+        resolve(docs.length);
+      })
+    })
+    // 查询今天的签到人数
+    var hitCardCount = await new Promise((resolve, reject) => {
+      Record.find({
+        hitCardTime:{
+          $gte:nowday,
+          $lt: now
+        },
+        use: true
+      }, function (err, docs) {
+        resolve(docs.length);
+      });
+    });
+    // 红包分配
+    var totalMoney = yesterdayJoinCount - hitCardCount;
+    var people = hitCardCount;
+    function rp(total, n) {
+      var remain = total
+      var ret = []
+      for (let i = 0; i < n - 1; i++) {
+        let m = Math.ceil(Math.random() * 100 * (remain - (n - (i + 1)) * 0.01)) / 100
+        ret.push(m)
+        remain -= m
+      }
+      ret.push(Number(remain.toFixed(2)))
+      return ret
+    }
+    var redBagArr = rp(totalMoney, people);
+    for (let i = 0; i < redBagArr.length; i++) {
+      redBagArr[i] += 1;
+      redBagArr[i] = redBagArr[i].toFixed(2);
+    }
+    // console.log(redBagArr);
   //   var insertMoney = new Promise((resolve, reject) => {
   //     User.update({
   //       hitCard: {

@@ -141,16 +141,14 @@ export default {
     this.canJoin = this.time_range('08:00','23:50');
     var info = await new Promise((resolve,reject) => {
       axios.post("/getInfo", data).then(res => {
-        console.log(res);
         resolve(res.data);
       });
     })
-    //   var haveUser = res.data.todayHaveUser;
-    // //   this.infos = res.data.todayJoinDocs;
-    //   this.totalPeople = res.data.todayJoinCount;
-    //   this.totalMoney = res.data.todayJoinCount;
-    //   this.successPeople = res.data.hitCardDocs.length;
-    //   this.failPeople = res.data.yesterdayJoinDocs.length - res.data.hitCardDocs.length;
+    console.log(info);
+      this.totalPeople = info.todayJoinCount;
+      this.totalMoney = info.todayJoinCount;
+      this.successPeople = info.hitCardDocs.length;
+      this.failPeople = info.yesterdayJoinCount - info.hitCardDocs.length;
       // if (haveUser) {
       //   this.btnText = "签到";
       // } else {
@@ -202,9 +200,7 @@ export default {
     var now = new Date();
     var hour = now.getHours();
     //判断时间在八点的前后
-    console.log(info.todayHaveUser);
     if(hour>=8){
-      console.log('走到这里啦'); 
       if (info.todayHaveUser) {
         this.btnText = '签到'
       }else{

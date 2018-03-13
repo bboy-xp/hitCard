@@ -21,13 +21,15 @@ class HomeController extends Controller {
     const nowDate = now.getDate();
     const nowMonth = now.getMonth();
     const nowYear = now.getFullYear();
-    const aDayAgo = new Date(nowYear,nowMonth,nowDate - 0);
+    const aDayAgo = new Date(nowYear, nowMonth, nowDate - 1);
     // 查询是否数据库里有用户，如果有将createTime追加到用户的数据里面
     const haveUser = await new Promise((resolve, reject) => {
-      User.find({ name,createTime: {
-        $gte: aDayAgo,
-        $lt: now,
-      } }, function (err, docs) {
+      User.find({
+        name, createTime: {
+          $gte: aDayAgo,
+          $lt: now,
+        }
+      }, function (err, docs) {
         if (docs.length !== 0) {
           resolve(true);
         } else {
@@ -35,13 +37,31 @@ class HomeController extends Controller {
         }
       })
     })
+    console.log(haveUser);
     if (!haveUser) {
-      var user = new User({
-        name: name,
-        money: money,
-        createTime: new Date(),
+      
+        var user = new User({
+          name: name,
+          createTime: now,
+        })
+        user.save();
+      
+      
+    } else {
+      
+      
+      await new Promise((resolve, reject) => {
+        User.update({ name: name }, {
+          createTime: now,
+        }, err => {
+          if (!!err) {
+            console.log(err);
+          }
+        })
       })
-      user.save();
+    }
+    console.log('走到这里了');
+    
       var record = new Record({
         name: name,
         money: 1,
@@ -49,27 +69,8 @@ class HomeController extends Controller {
         use: false
       })
       record.save();
-      ctx.body = 'ok';
-    }
-  //  else {
-  //     User.update({
-  //       name: name
-  //     }, {
-  //         $push: {
-  //           createTime: {
-  //             day: day,
-  //             month: month,
-  //             year: year,
-  //           }
-  //         }
-  //       }, (err) => {
-  //         if (!!err) {
-  //           console.log('mongoose更新数据报错' + err);
-  //         }
-  //       })
-      // ctx.body = 'ok';
-  //   }
-
+    
+    ctx.body = 'ok';
   }
   async getInfo() {
     const ctx = this.ctx;
@@ -78,8 +79,8 @@ class HomeController extends Controller {
     const nowDate = now.getDate();
     const nowMonth = now.getMonth();
     const nowYear = now.getFullYear();
-    const aDayAgo = new Date(nowYear,nowMonth,nowDate - 1);
-    const nowday = new Date(nowYear,nowMonth,nowDate);
+    const aDayAgo = new Date(nowYear, nowMonth, nowDate - 1);
+    const nowday = new Date(nowYear, nowMonth, nowDate);
     var name = ctx.request.body.name;
     var info = {};
     var User = ctx.model.User;
@@ -87,28 +88,34 @@ class HomeController extends Controller {
     //注意Model.find查询数据库时回掉函数有顺序，先err后docs
     //查询今天支付总人数
     info.todayJoinCount = await new Promise((resolve, reject) => {
-      User.find({ createTime: {
-        $gte: nowday,
-        $lt: now,
-      } }, function (err, docs) {
+      User.find({
+        createTime: {
+          $gte: nowday,
+          $lt: now,
+        }
+      }, function (err, docs) {
         resolve(docs.length);
       });
     })
     //查询昨天的总人数
     info.yesterdayJoinCount = await new Promise((resolve, reject) => {
-      User.find({ createTime: {
-        $gte: aDayAgo,
-        $lt: nowday,
-      } }, function (err, docs) {
+      User.find({
+        createTime: {
+          $gte: aDayAgo,
+          $lt: nowday,
+        }
+      }, function (err, docs) {
         resolve(docs.length);
       });
     })
     // 查询用户是否已支付
     var todayHaveUser = await new Promise((resolve, reject) => {
-      User.find({ name: name, createTime: {
-        $gte: nowday,
-        $lt: now,
-      } }, function (err, docs) {
+      User.find({
+        name: name, createTime: {
+          $gte: nowday,
+          $lt: now,
+        }
+      }, function (err, docs) {
         if (docs.length == 0) {
           resolve(false);
         } else {
@@ -118,10 +125,12 @@ class HomeController extends Controller {
     });
     info.todayHaveUser = todayHaveUser;
     var yesterdayHaveUser = await new Promise((resolve, reject) => {
-      User.find({ name: name, createTime: {
-        $gte: aDayAgo,
-        $lt: nowday,
-      } }, function (err, docs) {
+      User.find({
+        name: name, createTime: {
+          $gte: aDayAgo,
+          $lt: nowday,
+        }
+      }, function (err, docs) {
         if (docs.length == 0) {
           resolve(false);
         } else {
@@ -144,28 +153,42 @@ class HomeController extends Controller {
     });
     info.hitCardDocs = hitCardDocs;
     //查询昨天的参与挑战的情况
-    var yesterdayJoinCount = await new Promise((resolve, reject) => {
-      User.find({ createTime: {
-        $gte: aDayAgo,
-        $lt: nowday
-      } }, (err, docs) => {
-        resolve(docs.length);
+    var yesterdayJoinDocs = await new Promise((resolve, reject) => {
+      User.find({
+        createTime: {
+          $gte: aDayAgo,
+          $lt: nowday
+        }
+      }, (err, docs) => {
+        resolve(docs);
       })
     })
-    info.yesterdayJoinCount = yesterdayJoinCount;
+    info.yesterdayJoinDocs = yesterdayJoinDocs;
+    //获取早起之星
+    var earlestStar = await Record.find({
+      hitCardTime: {
+        $gte: nowday,
+        $lt: now
+      }
+    }).sort({ 'hitCardTime': -1 })[0];
+    info.earlestStar = earlestStar;
+    //获取毅力之星
+    var hardertStar = await User.find({}).sort({ 'money': 1 })[0];
+    info.hardertStar = hardertStar;
+
     ctx.body = info;
   }
   async meGetInfo() {
     const ctx = this.ctx;
-  //   var name = ctx.request.body.name;
-  //   var User = ctx.model.User;
-  //   var info = [];
-  //   //用await promise的方法阻塞获得数据，就不会出现前端玄学接不到数据的情况了
-  //   var info = await new Promise((resolve, reject) => {
-  //     User.find({ name: name }, function (err, docs) {
-  //       resolve(docs);
-  //     });
-  //   })
+    //   var name = ctx.request.body.name;
+    //   var User = ctx.model.User;
+    //   var info = [];
+    //   //用await promise的方法阻塞获得数据，就不会出现前端玄学接不到数据的情况了
+    //   var info = await new Promise((resolve, reject) => {
+    //     User.find({ name: name }, function (err, docs) {
+    //       resolve(docs);
+    //     });
+    //   })
     ctx.body = info;
   }
   async successHitCard() {
@@ -207,28 +230,28 @@ class HomeController extends Controller {
       }
     }
     var now = new Date();
-    var nowTime = String(now.getHours()+':'+now.getMinutes());
+    var nowTime = String(now.getHours() + ':' + now.getMinutes());
     var canOpenRedBag = time_range("05:00", "24:00", nowTime);
     var message;
     //计算的查询日期
     const nowDate = now.getDate();
     const nowMonth = now.getMonth();
     const nowYear = now.getFullYear();
-    const nowday = new Date(nowYear,nowMonth,nowDate - 0);
-    const aDayAgo = new Date(nowYear,nowMonth,nowDate - 1);
+    const nowday = new Date(nowYear, nowMonth, nowDate - 0);
+    const aDayAgo = new Date(nowYear, nowMonth, nowDate - 1);
     //后端判断是否数据库里有用户，和用户从前端发过来的时间是否符合时间段
     if (canOpenRedBag) {
-    
-      var haveUser = await new Promise((resolve,reject) => {
+
+      var haveUser = await new Promise((resolve, reject) => {
         User.find({
-          name:data.name,hitCard: {
+          name: data.name, hitCard: {
             $gte: nowday,
             $lt: now,
           }
-        },(err,docs) => {
-          if(docs.length == 0){
+        }, (err, docs) => {
+          if (docs.length == 0) {
             resolve(false);
-          }else{
+          } else {
             resolve(true);
           }
         })
@@ -238,52 +261,57 @@ class HomeController extends Controller {
       // var test = await new Promise((resolve,reject) => {
       //   User.find({
       //     name: data.name,
-          
+
       //   },(err,docs) => {
       //     resolve(docs);
       //   })
       // });
       // console.log(test);
-      if(!haveUser){
+      if (!haveUser) {
         // 更新user表
-        var userUpdateMessage = await new Promise((resolve,reject) => {
-          User.update({name: data.name},{
-            hitCard:now,
-          },(err) => {
-            if(!err){
+        var userUpdateMessage = await new Promise((resolve, reject) => {
+          User.update({ name: data.name }, {
+            hitCard: now,
+            $inc: {
+              money: 1,
+            }
+          }, (err) => {
+            if (!err) {
               resolve('ok');
-            }else{
+            } else {
               reject(err);
             }
           })
         });
         // console.log(userUpdateMessage);
         // 更新record流水表
-        var recordUpdateMessage = await new Promise((resolve,reject) => {
-          User.update({name: data.name,createTime: {
-            $gte: aDayAgo,
-            $lt: nowday,
-          }},{
-            hitCardTime: now,
-            use: true,
-            getMoney: 0,
-            got: false,
-          },(err) => {
-            if(!err){
-              resolve('ok');
-            }else{
-              reject(err);
+        var recordUpdateMessage = await new Promise((resolve, reject) => {
+          User.update({
+            name: data.name, createTime: {
+              $gte: aDayAgo,
+              $lt: nowday,
             }
-          })
+          }, {
+              hitCardTime: now,
+              use: true,
+              getMoney: 0,
+              got: false,
+            }, (err) => {
+              if (!err) {
+                resolve('ok');
+              } else {
+                reject(err);
+              }
+            })
         });
-        if(userUpdateMessage == "ok"&&recordUpdateMessage == "ok"){
+        if (userUpdateMessage == "ok" && recordUpdateMessage == "ok") {
           message = "ok"
-        }else{
+        } else {
           console.log(err);
           message = "后端更新数据出错，请重试";
         }
-        
-      }else{
+
+      } else {
         message = "您已签过到，请勿重复操作"
       }
     } else {
@@ -292,88 +320,6 @@ class HomeController extends Controller {
     // console.log(message);
     ctx.body = message;
   }
-  // async getMoney() {
-  //   const ctx = this.ctx;
-  //   var data = ctx.request.body;
-  //   var User = ctx.model.User;
-  //   var Record = ctx.model.Record;
-  //   //计算的查询日期
-  //   const now = new Date();
-  //   const nowDate = now.getDate();
-  //   const nowMonth = now.getMonth();
-  //   const nowYear = now.getFullYear();
-  //   const nowday = new Date(nowYear,nowMonth,nowDate - 0);
-  //   const aDayAgo = new Date(nowYear,nowMonth,nowDate - 1);
-  //   // 查询昨天的参与人数
-  //   var yesterdayJoinCount = await new Promise((resolve, reject) => {
-  //     User.find({createTime: {
-  //       $gte:aDayAgo,
-  //       $lt: nowday
-  //     }}, (err, docs) => {
-  //       resolve(docs.length);
-  //     })
-  //   })
-  //   // 查询今天的签到人数
-  //   var hitCardCount = await new Promise((resolve, reject) => {
-  //     Record.find({
-  //       hitCardTime:{
-  //         $gte:nowday,
-  //         $lt: now
-  //       },
-  //       use: true
-  //     }, function (err, docs) {
-  //       resolve(docs.length);
-  //     });
-  //   });
-  //   // 红包分配
-  //   var totalMoney = yesterdayJoinCount - hitCardCount;
-  //   var people = hitCardCount;
-  //   function rp(total, n) {
-  //     var remain = total
-  //     var ret = []
-  //     for (let i = 0; i < n - 1; i++) {
-  //       let m = Math.ceil(Math.random() * 100 * (remain - (n - (i + 1)) * 0.01)) / 100
-  //       ret.push(m)
-  //       remain -= m
-  //     }
-  //     ret.push(Number(remain.toFixed(2)))
-  //     return ret
-  //   }
-  //   var redBagArr = rp(totalMoney, people);
-  //   for (let i = 0; i < redBagArr.length; i++) {
-  //     redBagArr[i] += 1;
-  //     redBagArr[i] = Number(redBagArr[i].toFixed(2));
-  //   }
-  //   console.log(redBagArr);
-  //   // 分配好的红包钱redBagArr，接下来将redBagArr的元素分别update到每一个Collection
-  //   for (let i = 0; i < redBagArr.length; i++) {
-  //     var updateSuccess = await new Promise((resolve,reject) => {
-  //       Record.update({
-  //         hitCardTime:{
-  //           $gte:nowday,
-  //           $lt: now
-  //         },
-  //         got:false
-  //       },{
-  //         getMoney: redBagArr[i],
-  //         got: true
-  //       },err => {
-  //         if(!err){
-  //           resolve('ok');
-  //         }else{
-  //           reject(err);
-  //         }
-  //       })
-  //     });
-  //     if(updateSuccess == 'ok'){
-  //       console.log('第'+i+'个人更新成功');
-  //     }else{
-  //       console.log('第'+i+'个人更新失败，原因是'+ err);
-  //     }
-      
-  //   }
-  //   this.ctx.body = 'ok'
-  // }
 }
 
 module.exports = HomeController;

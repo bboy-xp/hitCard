@@ -2,7 +2,7 @@ module.exports = app => {
     const mongoose = app.mongoose;
     const UserSchema = new mongoose.Schema({
       name: { type: String },
-      money: { type: Number },//累计投入的钱数，做毅力排行榜
+      money: { type: Number },//累计投入的钱数，做毅力排行榜,hitCard时更新
       createTime: { type: Date},//参与的时间
       hitCard: {type: Date},//签到的时间，做早起排行榜,hitCard时更新
       

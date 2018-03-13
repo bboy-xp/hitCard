@@ -75,15 +75,15 @@
 <script>
 import axios from "axios";
 import CountDown from "vue2-countdown";
-import { format } from 'url';
-import { setInterval, clearInterval } from 'timers';
+import { format } from "url";
+import { setInterval, clearInterval } from "timers";
 export default {
   components: {
     CountDown
   },
   data() {
     return {
-      name: "gaomin",
+      name: "supreme6",
       totalPeople: 1111111,
       totalMoney: 1111111,
       successPeople: 2,
@@ -92,13 +92,13 @@ export default {
       name2: "feit",
       name3: "lbn",
       hitCardTime: "05:00",
-      hitCardMoney: '需要修改',
+      hitCardMoney: "需要修改",
       hitCardCount: 50,
       btnText: "参与打卡挑战",
       startTime: new Date().getTime(),
       currentTime: new Date().getTime(),
       openRedBag: false,
-      canJoin: false,
+      canJoin: false
     };
   },
   computed: {
@@ -115,78 +115,43 @@ export default {
     var month = date.getMonth() + 1;
     var day = date.getDate();
     var data = {
-      name: this.name,
+      name: this.name
     };
     //这里用time_range方法判断签到时间是否在早八点到五点
-    this.openRedBag = this.time_range('05:00','24:00');
+    this.openRedBag = this.time_range("05:00", "24:00");
     //用time_range方法判断参与时间是否符合时间，
-    this.canJoin = this.time_range('08:00','23:50');
-    var info = await new Promise((resolve,reject) => {
+    this.canJoin = this.time_range("08:00", "23:50");
+    var info = await new Promise((resolve, reject) => {
       axios.post("/getInfo", data).then(res => {
         resolve(res.data);
       });
-    })
-    console.log(info.yesterdayJoinCount);
-      this.totalPeople = info.todayJoinCount;
-      this.totalMoney = info.todayJoinCount;
-      this.successPeople = info.hitCardDocs.length;
-      this.failPeople = info.yesterdayJoinCount - info.hitCardDocs.length;
-      
+    });
+    this.totalPeople = info.todayJoinCount;
+    this.totalMoney = info.todayJoinCount;
+    this.successPeople = info.hitCardDocs.length;
+    this.failPeople = info.yesterdayJoinDocs.length - info.hitCardDocs.length;
+    console.log(info);
 
-      // 开始写早起之星逻辑
-      // var hitCardDocs = res.data.hitCardDocs;
-      // var minTime = 7000;
-      // hitCardDocs.forEach(element => {
-      //   if (String(element.hitCard[0].minute).length == 1) {
-      //     element.hitCard[0].minute.length = '0'+element.hitCard[0].minute.length;
-      //   }
-      //   var str1 = String(element.hitCard[0].hour);
-      //   var str2 = String(element.hitCard[0].minute);
-      //   var needFormatTime = str1 + str2;
-      //   var formatTime = parseInt(needFormatTime);
-      //   // 获取到最小的时间
-      //   minTime = Math.min(formatTime,minTime);
-      // });
-      // if(String(minTime).length == 3){
-      //   var str1 = String(minTime).substr(0,1);
-      //   var str2 = String(minTime).substr(1,2);
-      //   this.hitCardTime = str1 + ':' + str2;
-      // }else if (String(minTime).length == 4) {
-      //   var str1 = String(minTime).substr(0,2);
-      //   var str2 = String(minTime).substr(2,2);
-      //   this.hitCardTime = str1 + ':' + str2;
-      // };
-      // // 开始写毅力之星的逻辑
-      
-      // var maxCount = 0;
-      // var maxCountName = '';
-      // hitCardDocs.forEach(element => {
-      //   if (element.hitCard.length > maxCount) {
-      //     maxCount = element.hitCard.length;
-      //     maxCountName = element.name;
-      //   }else{
-      //     maxCount = maxCount;
-      //   }
-      // });
-      // console.log(maxCount,maxCountName);
-      // this.name3 = maxCountName;
-      // this.hitCardCount = maxCount;
-      // // 开始写运气之星的逻辑
-    
+    // 开始写早起之星逻辑
+
+    // 开始写毅力之星的逻辑
+
+    // 开始写运气之星的逻辑
+
     var now = new Date();
     var hour = now.getHours();
     //判断时间在八点的前后
-    if(hour>=8){
+    if (hour >= 8) {
       if (info.todayHaveUser) {
-        this.btnText = '签到'
-      }else{
-        this.btnText = '参与打卡挑战' 
+        this.btnText = "签到";
+      } else {
+        this.btnText = "参与打卡挑战";
       }
-    }else{
+    } else {
       if (info.yesterdayHaveUser) {
-        this.btnText ='签到'
-      }else{
-        this.btnText = '参与打卡挑战'
+        this.btnText = "签到";
+      } else {
+        this.btnText = "参与打卡挑战";
       }
     }
   },
@@ -198,29 +163,29 @@ export default {
       console.log("计时结束");
     },
     join() {
-      if (this.btnText === "参与打卡挑战"&&this.canJoin) {
+      if (this.btnText === "参与打卡挑战" && this.canJoin) {
         alert("支付成功,参与挑战");
         var data = {
           info: {
             name: this.name,
-            money: 1,
+            money: 1
           }
         };
         axios.post("/join", data).then(res => {
+          console.log(res);
           if ((res.data = "ok")) {
             window.location.reload();
           }
         });
       } else if (this.btnText === "签到" && this.openRedBag) {
-        axios.post('/successHitCard',{name: this.name}).then(res => {
+        axios.post("/successHitCard", { name: this.name }).then(res => {
           if (res.data == "ok") {
             alert("签到成功,明天再接再厉!");
             this.btnText = "参与打卡挑战";
-          }else{
+          } else {
             alert(res.data);
           }
-        })
-        
+        });
       } else {
         alert("时间还没到哦");
       }
@@ -248,7 +213,6 @@ export default {
         return false;
       }
     }
-    
   }
 };
 </script>

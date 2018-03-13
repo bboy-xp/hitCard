@@ -83,7 +83,7 @@ export default {
   },
   data() {
     return {
-      name: "feit",
+      name: "gaomin",
       totalPeople: 1111111,
       totalMoney: 1111111,
       successPeople: 2,
@@ -110,24 +110,6 @@ export default {
       return time;
     }
   },
-  created:function(){
-    var name = this.name;
-    // function checkTime() {
-    //   var now = new Date();
-    //   var month = now.getMonth() + 1;
-    //   var day = now.getDate();
-    //   var hour = now.getHours();
-    //   var minute = now.getMinutes(); 
-    //   if(hour == 16){
-    //     axios.post('/getMoney',{name:name,month:month,day:day}).then(res => {
-    //       console.log(res);
-    //     })
-    //     clearInterval(i);
-    //   }
-    //   // console.log(hour,minute);
-    // }
-    // var i = setInterval(checkTime,3000);
-  },
   mounted: async function get() {
     var date = new Date();
     var month = date.getMonth() + 1;
@@ -144,18 +126,12 @@ export default {
         resolve(res.data);
       });
     })
-    console.log(info);
+    console.log(info.yesterdayJoinCount);
       this.totalPeople = info.todayJoinCount;
       this.totalMoney = info.todayJoinCount;
       this.successPeople = info.hitCardDocs.length;
       this.failPeople = info.yesterdayJoinCount - info.hitCardDocs.length;
-      // if (haveUser) {
-      //   this.btnText = "签到";
-      // } else {
-      //   this.btnText = "参与打卡挑战";
-      // };
-
-      // this.btnText = "参与打卡挑战";
+      
 
       // 开始写早起之星逻辑
       // var hitCardDocs = res.data.hitCardDocs;

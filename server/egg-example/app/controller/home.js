@@ -39,37 +39,37 @@ class HomeController extends Controller {
     })
     console.log(haveUser);
     if (!haveUser) {
-      
-        var user = new User({
-          name: name,
-          createTime: now,
-        })
-        user.save();
-      
-      
+
+      var user = new User({
+        name: name,
+        createTime: now,
+      })
+      user.save();
+
+
     } else {
-      
-      
+
       await new Promise((resolve, reject) => {
         User.update({ name: name }, {
           createTime: now,
         }, err => {
           if (!!err) {
             console.log(err);
+            reject(err);
+          }else{
+            resolve("ok")
           }
         })
       })
     }
-    console.log('走到这里了');
-    
-      var record = new Record({
-        name: name,
-        money: 1,
-        createTime: new Date(),
-        use: false
-      })
-      record.save();
-    
+
+    var record = new Record({
+      name: name,
+      money: 1,
+      createTime: new Date(),
+      use: false
+    })
+    record.save();
     ctx.body = 'ok';
   }
   async getInfo() {
@@ -81,6 +81,7 @@ class HomeController extends Controller {
     const nowYear = now.getFullYear();
     const aDayAgo = new Date(nowYear, nowMonth, nowDate - 1);
     const nowday = new Date(nowYear, nowMonth, nowDate);
+
     var name = ctx.request.body.name;
     var info = {};
     var User = ctx.model.User;
@@ -175,20 +176,37 @@ class HomeController extends Controller {
     //获取毅力之星
     var hardertStar = await User.find({}).sort({ 'money': 1 })[0];
     info.hardertStar = hardertStar;
-
+    //获取运气之星
+    var luckStar = await Record.find({
+      hitCardTime: {
+        $gte: nowday,
+        $lt: now
+      },
+      use: true
+      
+    }).sort({'getMoney': 1})[0];
+    info.luckStar = luckStar;
     ctx.body = info;
   }
   async meGetInfo() {
     const ctx = this.ctx;
-    //   var name = ctx.request.body.name;
-    //   var User = ctx.model.User;
-    //   var info = [];
-    //   //用await promise的方法阻塞获得数据，就不会出现前端玄学接不到数据的情况了
-    //   var info = await new Promise((resolve, reject) => {
-    //     User.find({ name: name }, function (err, docs) {
-    //       resolve(docs);
-    //     });
-    //   })
+      var name = ctx.request.body.name;
+      var Record = ctx.model.Record;
+      var info = {};
+     // 用await promise的方法阻塞获得数据，就不会出现前端玄学接不到数据的情况了
+      info.totalMoney = await new Promise((resolve, reject) => {
+        Record.find({ name: name }, function (err, docs) {
+          resolve(docs.length);
+        });
+      });
+      info.totalHitCard = await new Promise((resolve,reject) => {
+        Record.find({
+          use: true,
+          got: true
+        },(err,docs) => {
+          resolve(docs);
+        })
+      })
     ctx.body = info;
   }
   async successHitCard() {

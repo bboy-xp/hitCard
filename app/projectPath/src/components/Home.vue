@@ -83,17 +83,17 @@ export default {
   },
   data() {
     return {
-      name: "supreme6",
+      name: "hhp",
       totalPeople: 1111111,
       totalMoney: 1111111,
       successPeople: 2,
       failPeople: 3,
-      name1: "xp",
-      name2: "feit",
-      name3: "lbn",
-      hitCardTime: "05:00",
-      hitCardMoney: "需要修改",
-      hitCardCount: 50,
+      name1: "",
+      name2: "",
+      name3: "",
+      hitCardTime: "",
+      hitCardMoney: 0,
+      hitCardCount: 0,
       btnText: "参与打卡挑战",
       startTime: new Date().getTime(),
       currentTime: new Date().getTime(),
@@ -133,11 +133,29 @@ export default {
     console.log(info);
 
     // 开始写早起之星逻辑
-
+    if (info.earlestStar != null) {
+      var earlestStar = info.earlestStar;
+      this.name1 = earlestStar.name;
+      var earlestStarTime = earlestStar.createTime;
+      var earlestStarTimeHour = earlestStarTime.getHours();
+      var earlestStarTimeMinute = earlestStarTime.getMinutes();
+      var earlestStarTimeStr = String(earlestStarTimeHour + ':' + earlestStarTimeMinute);
+      this.hitCardTime = earlestStarTimeStr;
+    }
+    
     // 开始写毅力之星的逻辑
-
+    if (info.harderStar != null) {
+      var harderStar = info.harderStar;
+      this.name3 = harderStar.name;
+      this.hitCardCount = harderStar.money;
+    }
+    
     // 开始写运气之星的逻辑
-
+    if(info.luckStar != null) {
+      var luckStar = info.luckStar;
+      this.name2 = luckStar.name;
+      this.hitCardMoney = luckStar.getMoney;
+    }
     var now = new Date();
     var hour = now.getHours();
     //判断时间在八点的前后

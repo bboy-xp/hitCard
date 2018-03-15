@@ -249,7 +249,7 @@ class HomeController extends Controller {
     }
     var now = new Date();
     var nowTime = String(now.getHours() + ':' + now.getMinutes());
-    var canOpenRedBag = time_range("05:00", "24:00", nowTime);
+    var canOpenRedBag = time_range("05:00", "08:00", nowTime);
     var message;
     //计算的查询日期
     const nowDate = now.getDate();

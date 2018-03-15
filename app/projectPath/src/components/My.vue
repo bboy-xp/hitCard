@@ -53,7 +53,7 @@ import axios from "axios";
 export default {
     data() {
         return{
-            name: "hhp",
+            name: "feit",
             pay: 0,
             harvest: 0,
             hitCard: 0,

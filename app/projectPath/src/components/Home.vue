@@ -83,7 +83,7 @@ export default {
   },
   data() {
     return {
-      name: "hhp",
+      name: "feit",
       totalPeople: 1111111,
       totalMoney: 1111111,
       successPeople: 2,
@@ -118,7 +118,7 @@ export default {
       name: this.name
     };
     //这里用time_range方法判断签到时间是否在早八点到五点
-    this.openRedBag = this.time_range("05:00", "24:00");
+    this.openRedBag = this.time_range("05:00", "08:00");
     //用time_range方法判断参与时间是否符合时间，
     this.canJoin = this.time_range("08:00", "23:50");
     var info = await new Promise((resolve, reject) => {

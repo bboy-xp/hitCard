@@ -9,7 +9,8 @@ import Me from './components/Me'
 import Home from './components/Home'
 import My from './components/My'
 import Rule from './components/Rule'
-
+import Logup from './components/Logup'
+import Login from './components/Login'
 
 Vue.use(VueRouter)
 
@@ -24,6 +25,14 @@ const routes = [{
 {
   path: '/Rule',
   component: Rule
+},
+{
+  path: '/Logup',
+  component: Logup
+},
+{
+  path: '/Login',
+  component: Login
 }
 
 ]

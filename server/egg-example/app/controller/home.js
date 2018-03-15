@@ -37,7 +37,7 @@ class HomeController extends Controller {
         }
       })
     })
-    console.log(haveUser);
+    // console.log(haveUser);
     if (!haveUser) {
 
       var user = new User({
@@ -337,6 +337,55 @@ class HomeController extends Controller {
     }
     // console.log(message);
     ctx.body = message;
+  }
+  async logup(){
+    const ctx = this.ctx;
+    var data = ctx.request.body;
+    var Password = ctx.model.Password;
+    // console.log(data.password);
+    const haveUser = await new Promise((resolve, reject) => {
+      Password.find({
+        name: data.username
+      }, function (err, docs) {
+        if (docs.length !== 0) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      })
+    });
+    if (!haveUser) {
+      var user = new Password({
+        name: data.username,
+        password: data.password
+      })
+      user.save();
+    }else{
+      ctx.body = '该用户名已处在'
+    }
+    ctx.body = 'ok';
+  }
+  async login() {
+    const ctx = this.ctx;
+    var data = ctx.request.body;
+    var Password = ctx.model.Password;
+    const haveUser = await new Promise((resolve, reject) => {
+      Password.find({
+        name: data.username,
+        password: data.password
+      }, function (err, docs) {
+        if (docs.length !== 0) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      })
+    });
+    if(!haveUser){
+      ctx.body = '用户不存在';
+    }else{
+      ctx.body = 'ok';
+    }
   }
 }
 

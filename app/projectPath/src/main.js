@@ -4,8 +4,8 @@ import Vue from 'vue'
 import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
 import App from './App'
-import HelloFromVux from './components/HelloFromVux'
-import Me from './components/Me'
+// import HelloFromVux from './components/HelloFromVux'
+// import Me from './components/Me'
 import Home from './components/Home'
 import My from './components/My'
 import Rule from './components/Rule'
@@ -16,7 +16,7 @@ Vue.use(VueRouter)
 
 const routes = [{
   path: '/',
-  component: Home
+  component: Login
 },
 {
   path: '/My',
@@ -31,8 +31,8 @@ const routes = [{
   component: Logup
 },
 {
-  path: '/Login',
-  component: Login
+  path: '/Home',
+  component: Home
 }
 
 ]

@@ -63,12 +63,12 @@
                 <img class="tabIcon" src="../../static/picture/home.png" alt="">
                 <div class="tabName Home">首页</div>
             </div>
-            <router-link to="/My">
+            <div v-on:click="gotoMy">
                 <div class="tab">
                     <img class="tabIcon" src="../../static/picture/me.png" alt="">
                     <div class="tabName My">我的</div>
                 </div>
-            </router-link>
+            </div>
         </div>
     </div>
 </template>
@@ -83,7 +83,7 @@ export default {
   },
   data() {
     return {
-      name: "feit",
+      name,
       totalPeople: 1111111,
       totalMoney: 1111111,
       successPeople: 2,
@@ -111,6 +111,8 @@ export default {
     }
   },
   mounted: async function get() {
+    this.name = this.$route.query.name;
+    // console.log(this.$route.query.name);
     var date = new Date();
     var month = date.getMonth() + 1;
     var day = date.getDate();
@@ -130,7 +132,7 @@ export default {
     this.totalMoney = info.todayJoinCount;
     this.successPeople = info.hitCardDocs.length;
     this.failPeople = info.yesterdayJoinDocs.length - info.hitCardDocs.length;
-    console.log(info);
+    // console.log(info);
 
     // 开始写早起之星逻辑
     if (info.earlestStar != null) {
@@ -190,7 +192,7 @@ export default {
           }
         };
         axios.post("/join", data).then(res => {
-          console.log(res);
+          // console.log(res);
           if ((res.data = "ok")) {
             window.location.reload();
           }
@@ -230,8 +232,11 @@ export default {
       } else {
         return false;
       }
+    },
+    gotoMy() {
+      this.$router.push({path: '/My',query:{name: this.name}});
     }
-  }
+  },
 };
 </script>
 <style scoped>

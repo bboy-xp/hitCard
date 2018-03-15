@@ -26,7 +26,15 @@ module.exports = {
       '/successHitCard': {
         target: 'http://127.0.0.1:7001',
         changeOrigin: 'true',
-      }
+      },
+      '/logup': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: 'true',
+      },
+      '/login': {
+        target: 'http://127.0.0.1:7001',
+        changeOrigin: 'true',
+      },
     },
 
     // Various Dev Server settings

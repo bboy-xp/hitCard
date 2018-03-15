@@ -35,12 +35,12 @@
             </div>
         </div>
         <div class="foot">
-            <router-link to="/">
+            <div v-on:click="gotoHome">
                 <div class="tab">
                     <img class="tabIcon" src="../../static/picture/home.png" alt="">
                     <div class="tabName Home">首页</div>
                 </div>
-            </router-link>
+            </div>
             <div class="tab">
                 <img class="tabIcon" src="../../static/picture/me.png" alt="">
                 <div class="tabName My">我的</div>
@@ -53,7 +53,7 @@ import axios from "axios";
 export default {
     data() {
         return{
-            name: "feit",
+            name,
             pay: 0,
             harvest: 0,
             hitCard: 0,
@@ -61,8 +61,10 @@ export default {
         }
     },
     mounted: async function(){
+        this.name = this.$route.query.name;
+        // console.log(this.$route.query.name);
         axios.post("/meGetInfo",{name: this.name}).then(res => {
-            console.log(res);
+            // console.log(res);
             this.pay = res.data.totalMoney;
             this.hitCard = res.data.totalHitCard.length;
             var totalHitCard = res.data.totalHitCard;
@@ -79,6 +81,11 @@ export default {
             // this.hitCard = res.data[0].hitCard.length;
             // this.infos = res.data[0].hitCard;
         })
+    },
+    methods:{
+        gotoHome() {
+            this.$router.push({path: '/Home',query:{name: this.name}});
+        }
     }
 };
 </script>

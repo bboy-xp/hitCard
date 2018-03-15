@@ -4,9 +4,9 @@
         <span class="simpleStyle">用户名</span>
         <input class="inputStyle" v-model="username" type="text">
         <span class="simpleStyle">密码</span>
-        <input class="inputStyle" v-model="password" type="text">
+        <input class="inputStyle" v-model="password" type="password">
         
-        <button class="simpleStyle">登录</button>
+        <button class="simpleStyle" v-on:click="login">登录</button>
         <router-link to="/Logup">
             <div class="gotoLogup">点我注册账号</div>
         </router-link>
@@ -14,12 +14,30 @@
 </template>
 <script>
 import axios from "axios";
+import { clearTimeout } from 'timers';
 export default {
     data(){
         return{
             username:'',
             password:''
 
+        }
+    },
+    methods: {
+        login() {
+            var data = {
+                username: this.username,
+                password: this.password
+            }
+            axios.post('/login',data).then(res =>{
+                if(res.data === 'ok'){
+                    alert('登录成功');
+                    this.$router.push({path: '/Home',query:{name: this.username}});
+                }else{
+                    alert(res.data);
+
+                }
+            })
         }
     }
 };

@@ -25,10 +25,7 @@ class HomeController extends Controller {
     // 查询是否数据库里有用户，如果有将createTime追加到用户的数据里面
     const haveUser = await new Promise((resolve, reject) => {
       User.find({
-        name, createTime: {
-          $gte: aDayAgo,
-          $lt: now,
-        }
+        name
       }, function (err, docs) {
         if (docs.length !== 0) {
           resolve(true);
@@ -144,12 +141,13 @@ class HomeController extends Controller {
     //查询数据库今天成功签到的情况
     var hitCardDocs = await new Promise((resolve, reject) => {
       Record.find({
-        hitCard: {
+        hitCardTime: {
           $gte: nowday,
           $lt: now
         }
       }, function (err, docs) {
         resolve(docs)
+        
       });
     });
     info.hitCardDocs = hitCardDocs;
@@ -162,6 +160,7 @@ class HomeController extends Controller {
         }
       }, (err, docs) => {
         resolve(docs);
+        
       })
     })
     info.yesterdayJoinDocs = yesterdayJoinDocs;
@@ -172,21 +171,23 @@ class HomeController extends Controller {
         $gte: nowday,
         $lt: now
       }
-    }).sort({ 'hitCardTime': -1 })[0];
-    info.earlestStar = earlestStar;
+    },(err,docs) => {
+      
+    }).sort({'hitCardTime':1});
+    info.earlestStar = earlestStar[0];
     //获取毅力之星
-    var hardertStar = await User.find({}).sort({ 'money': 1 })[0];
-    info.hardertStar = hardertStar;
+    var harderStar = await User.find({}).sort({ 'money': -1 });
+    info.harderStar = harderStar[0];
     //获取运气之星
     var luckStar = await Record.find({
       hitCardTime: {
         $gte: nowday,
         $lt: now
       },
-      use: true
+      got: true
       
-    }).sort({'getMoney': 1})[0];
-    info.luckStar = luckStar;
+    }).sort({'getMoney': -1});
+    info.luckStar = luckStar[0];
     ctx.body = info;
   }
   async meGetInfo() {
@@ -202,6 +203,7 @@ class HomeController extends Controller {
       });
       info.totalHitCard = await new Promise((resolve,reject) => {
         Record.find({
+          name: name,
           use: true,
           got: true
         },(err,docs) => {
@@ -305,7 +307,7 @@ class HomeController extends Controller {
         // console.log(userUpdateMessage);
         // 更新record流水表
         var recordUpdateMessage = await new Promise((resolve, reject) => {
-          User.update({
+          Record.update({
             name: data.name, createTime: {
               $gte: aDayAgo,
               $lt: nowday,

@@ -143,15 +143,21 @@ export default {
     this.totalMoney = info.todayJoinCount;
     this.successPeople = info.hitCardDocs.length;
     this.failPeople = info.yesterdayJoinDocs.length - info.hitCardDocs.length;
-    console.log(info);
 
     // 开始写早起之星逻辑
     if (info.earlestStar != null) {
       var earlestStar = info.earlestStar;
       this.name1 = earlestStar.name;
-      var earlestStarTime = earlestStar.createTime;
+      var earlestStarTime = earlestStar.hitCardTime;
+      earlestStarTime = new Date(earlestStarTime);
       var earlestStarTimeHour = earlestStarTime.getHours();
       var earlestStarTimeMinute = earlestStarTime.getMinutes();
+      if(earlestStarTimeHour < 10){
+        earlestStarTimeHour = '0' + earlestStarTimeHour;
+      }
+      if(earlestStarTimeMinute < 10){
+        earlestStarTimeMinute = '0' + earlestStarTimeMinute;
+      }
       var earlestStarTimeStr = String(
         earlestStarTimeHour + ":" + earlestStarTimeMinute
       );
@@ -324,7 +330,9 @@ export default {
   font-size: 20px;
   font-family: "黑体";
   font-weight: bolder;
-  margin: 10px 0 0 105px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
   width: 40vw;
 }
 .situation {

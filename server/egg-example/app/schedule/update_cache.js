@@ -17,12 +17,13 @@ module.exports = {
     // 查询昨天的参与人数
     var yesterdayJoinCount = await new Promise((resolve, reject) => {
       User.find({createTime: {
-        $gte:aDayAgo,
+        $gte:aDayAgo, 
         $lt: nowday
       }}, (err, docs) => {
         resolve(docs.length);
       })
     })
+    console.log(yesterdayJoinCount);
     // 查询今天的签到人数
     var hitCardCount = await new Promise((resolve, reject) => {
       Record.find({
@@ -35,6 +36,7 @@ module.exports = {
         resolve(docs.length);
       });
     });
+    console.log(hitCardCount);
     // 红包分配
     var totalMoney = yesterdayJoinCount - hitCardCount;
     var people = hitCardCount;
@@ -50,6 +52,7 @@ module.exports = {
       return ret
     }
     var redBagArr = rp(totalMoney, people);
+    console.log(redBagArr);
     for (let i = 0; i < redBagArr.length; i++) {
       redBagArr[i] += 1;
       redBagArr[i] = Number(redBagArr[i].toFixed(2));

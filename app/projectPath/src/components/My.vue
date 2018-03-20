@@ -27,7 +27,7 @@
             <div class="title">战绩明细</div>
             <div class="details">
                 <div class="detail" v-for = '(info,index) in infos' :key="index">
-                    <div class="date">{{info.hitCardTime.getMonth()}}-{{info.hitCardTime.getDate()}}</div>
+                    <div class="date">{{new Date(info.hitCardTime).getMonth()+1}}-{{new Date(info.hitCardTime).getDate()}}</div>
                     <div class="hitCard">已打卡</div>
                     <div class="money">+{{info.getMoney}}</div>
                 </div>
@@ -49,6 +49,7 @@
 </template>
 <script>
 import axios from "axios";
+import { clearTimeout } from 'timers';
 export default {
   data() {
     return {

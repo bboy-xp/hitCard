@@ -100,7 +100,7 @@ class HomeController extends Controller {
     })
     //查询昨天的总人数
     info.yesterdayJoinCount = await new Promise((resolve, reject) => {
-      User.find({
+      Record.find({
         createTime: {
           $gte: aDayAgo,
           $lt: nowday,
@@ -155,7 +155,7 @@ class HomeController extends Controller {
     info.hitCardDocs = hitCardDocs;
     //查询昨天的参与挑战的情况
     var yesterdayJoinDocs = await new Promise((resolve, reject) => {
-      User.find({
+      Record.find({
         createTime: {
           $gte: aDayAgo,
           $lt: nowday
@@ -165,6 +165,7 @@ class HomeController extends Controller {
       })
     })
     info.yesterdayJoinDocs = yesterdayJoinDocs;
+    
     //获取早起之星
     var earlestStar = await Record.find({
       hitCardTime: {

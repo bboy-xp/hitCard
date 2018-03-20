@@ -84,10 +84,10 @@ export default {
   data() {
     return {
       name,
-      totalPeople: 1111111,
-      totalMoney: 1111111,
-      successPeople: 2,
-      failPeople: 3,
+      totalPeople: 999999,
+      totalMoney: 999999,
+      successPeople: 0,
+      failPeople: 0,
       name1: "",
       name2: "",
       name3: "",
@@ -105,9 +105,20 @@ export default {
     endTime() {
       var date = new Date();
       var month = date.getMonth() + 1;
-      var day = date.getDate() + 1;
-      var time = new Date("2018-" + month + "-" + day + " 05:00:00").getTime();
-      return time;
+      var nextDay = date.getDate() + 1;
+      var today = date.getDate();
+      var hour = date.getHours();
+      if (hour >= 8) {
+        var time = new Date(
+          "2018-" + month + "-" + nextDay + " 05:00:00"
+        ).getTime();
+        return time;
+      } else {
+        var time = new Date(
+          "2018-" + month + "-" + today + " 05:00:00"
+        ).getTime();
+        return time;
+      }
     }
   },
   mounted: async function get() {
@@ -132,7 +143,7 @@ export default {
     this.totalMoney = info.todayJoinCount;
     this.successPeople = info.hitCardDocs.length;
     this.failPeople = info.yesterdayJoinDocs.length - info.hitCardDocs.length;
-    // console.log(info);
+    console.log(info);
 
     // 开始写早起之星逻辑
     if (info.earlestStar != null) {
@@ -141,19 +152,21 @@ export default {
       var earlestStarTime = earlestStar.createTime;
       var earlestStarTimeHour = earlestStarTime.getHours();
       var earlestStarTimeMinute = earlestStarTime.getMinutes();
-      var earlestStarTimeStr = String(earlestStarTimeHour + ':' + earlestStarTimeMinute);
+      var earlestStarTimeStr = String(
+        earlestStarTimeHour + ":" + earlestStarTimeMinute
+      );
       this.hitCardTime = earlestStarTimeStr;
     }
-    
+
     // 开始写毅力之星的逻辑
     if (info.harderStar != null) {
       var harderStar = info.harderStar;
       this.name3 = harderStar.name;
       this.hitCardCount = harderStar.money;
     }
-    
+
     // 开始写运气之星的逻辑
-    if(info.luckStar != null) {
+    if (info.luckStar != null) {
       var luckStar = info.luckStar;
       this.name2 = luckStar.name;
       this.hitCardMoney = luckStar.getMoney;
@@ -234,11 +247,17 @@ export default {
       }
     },
     gotoMy() {
-      this.$router.push({path: '/My',query:{name: this.name}});
+      this.$router.replace({ path: "/My", query: { name: this.name } });
     }
-  },
+  }
 };
 </script>
+
+<style scoped>
+
+</style>
+
+
 <style scoped>
 .contain {
   height: 100vh;
@@ -248,11 +267,12 @@ export default {
   align-items: center;
 }
 .head {
-  height: 270px;
-  margin-bottom: 20px;
+  height: 32%;
+  margin-bottom: 3vh;
 }
 .bg {
   width: 100%;
+  height: 33%;
   position: absolute;
   left: 0;
   z-index: -1;
@@ -260,7 +280,7 @@ export default {
 .info {
   z-index: 10px;
   color: white;
-  margin: 80px;
+  margin: 60px 80px 80px 80px;
   text-align: center;
   font-size: 13px;
   font-weight: lighter;
@@ -285,7 +305,7 @@ export default {
   text-align: center;
 }
 .joinText {
-  width: 300px;
+  width: 80vw;
   padding: 5px 0px;
   box-shadow: 5px 5px 5px #ffe4b3;
   border-radius: 10px;
@@ -305,19 +325,19 @@ export default {
   font-family: "黑体";
   font-weight: bolder;
   margin: 10px 0 0 105px;
-  width: 150px;
+  width: 40vw;
 }
 .situation {
   text-align: center;
 }
 .situationText {
-  /* margin: 5px 0 20px 35px; */
+  margin-bottom: 3vh;
   font-size: 13px;
   font-family: "黑体";
 }
 
 .headPic {
-  height: 60px;
+  height: 9vh;
   border: 3px solid #d3cfcf;
   border-radius: 60px;
   overflow: hidden;
@@ -354,7 +374,7 @@ export default {
   font-size: 11px;
 }
 .foot {
-  background-color: #f2f2f2;
+  background-color: #f5f5f5;
   display: flex;
   justify-content: space-around;
   height: 50px;
@@ -363,12 +383,13 @@ export default {
 .tabIcon {
   height: 20px;
   margin-left: 3px;
-  margin-top: 4px;
+  margin-top: 7px;
 }
 .tabName {
   font-size: 13px;
+  margin-top: -3px;
 }
-.My {
+.Home {
   color: hsl(202, 100%, 50%);
 }
 </style>

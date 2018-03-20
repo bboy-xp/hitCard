@@ -6,7 +6,7 @@
         <span class="simpleStyle">密码</span>
         <input class="inputStyle" v-model="password" type="password">
         
-        <button class="simpleStyle" v-on:click="login">登录</button>
+        <button class="simpleStyle btn" v-on:click="login">登录</button>
         <router-link to="/Logup">
             <div class="gotoLogup">点我注册账号</div>
         </router-link>
@@ -60,5 +60,8 @@ export default {
     .gotoLogup{
         color: red;
     }
-    
+    .btn{
+        height: 20px;
+        width: 40px;
+    }
 </style>

@@ -7,7 +7,7 @@
         <input class="inputStyle" v-model="password" type="text">
         <span class="simpleStyle">确认密码</span>
         <input class="inputStyle" v-model="passwordAgain" type="text">
-        <button class="simpleStyle" v-on:click="logup">注册</button>
+        <button class="simpleStyle btn" v-on:click="logup">注册</button>
     </div>
 </template>
 <script>
@@ -59,4 +59,8 @@ export default {
 .inputStyle {
   padding: 5px 5px;
 }
+.btn{
+        height: 20px;
+        width: 40px;
+    }
 </style>

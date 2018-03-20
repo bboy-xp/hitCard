@@ -31,7 +31,6 @@
                     <div class="hitCard">已打卡</div>
                     <div class="money">+{{info.getMoney}}</div>
                 </div>
-                
             </div>
         </div>
         <div class="foot">
@@ -51,161 +50,152 @@
 <script>
 import axios from "axios";
 export default {
-    data() {
-        return{
-            name,
-            pay: 0,
-            harvest: 0,
-            hitCard: 0,
-            infos:[]
-        }
-    },
-    mounted: async function(){
-        this.name = this.$route.query.name;
-        // console.log(this.$route.query.name);
-        axios.post("/meGetInfo",{name: this.name}).then(res => {
-            // console.log(res);
-            this.pay = res.data.totalMoney;
-            this.hitCard = res.data.totalHitCard.length;
-            var totalHitCard = res.data.totalHitCard;
-            var totalMoney = 0;
-            for (let i = 0; i < totalHitCard.length; i++) {
-                totalMoney += totalMoney;
-            }
-            this.harvest = totalMoney;
-            this.infos = totalHitCard;
-            // console.log(res.data[0].hitCard[0].day);
-            // this.pay = res.data[0].createTime.length;
-            // //这里需要修改，将打卡的情况也加入数据库里，在这里渲染
-            // this.harvest = '需要修改';
-            // this.hitCard = res.data[0].hitCard.length;
-            // this.infos = res.data[0].hitCard;
-        })
-    },
-    methods:{
-        gotoHome() {
-            this.$router.push({path: '/Home',query:{name: this.name}});
-        }
+  data() {
+    return {
+      name,
+      pay: 0,
+      harvest: 0,
+      hitCard: 0,
+      infos: []
+    };
+  },
+  mounted: async function() {
+    this.name = this.$route.query.name;
+    axios.post("/meGetInfo", { name: this.name }).then(res => {
+      this.pay = res.data.totalMoney;
+      this.hitCard = res.data.totalHitCard.length;
+      var totalHitCard = res.data.totalHitCard;
+      var totalMoney = 0;
+      for (let i = 0; i < totalHitCard.length; i++) {
+        totalMoney += totalMoney;
+      }
+      this.harvest = totalMoney;
+      this.infos = totalHitCard;
+    });
+  },
+  methods: {
+    gotoHome() {
+      this.$router.replace({ path: "/Home", query: { name: this.name } });
     }
+  }
 };
 </script>
 
 <style scoped>
-    .contain{
-        height: 100vh;
-        width: 100vw;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .head{
-        height: 200px;
-        
+.contain {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.head {
+  height: 200px;
+  width:100%;
+}
+.bg {
+  width: 100%;
+  height: 32vh;
+  position: absolute;
+  left: 0;
+  z-index: -1;
+}
+.me {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+.myHeadPic {
+  height: 60px;
+  width: 60px;
+  border: 3px solid rgb(247, 236, 236);
+  border-radius: 60px;
+  overflow: hidden;
+  margin: 10px auto 0 auto;
+}
+.name {
+  font-size: 19px;
+}
+.infos {
+  margin-top: -65px;
+  display: flex;
+  width: 100%;
+  color: white;
+  text-align: center;
+}
+.info {
+  margin-top: 80px;
+  width: 22vw;
+  flex:1;
+  display: flex;
+  flex-direction: column;
+}
+.infoTitle {
+margin-left: 10%;
+  width: 100px;
+  font-size: 15px;
+}
+.infoCount {
+  font-size: 20px;
+}
+.body {
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+}
+.title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: lighter;
+  font-size: 14px;
+  padding: 3px 15px;
+  background-color: #eeeeee;
+  width: 100%;
+}
+.details {
+  overflow: scroll;
+}
+.detail {
+  border-bottom: 1px solid #efefef;
+  display: flex;
+  height: 7vh;
+  align-items: center;
+  font-size: 14px;
+}
+.date {
+  margin: 0 10px 0 15px;
+  color: #909090;
+}
+.hitCard {
+  flex: 1;
+  color: #ffcb6c;
+}
+.money {
+  margin-right: 20px;
+  color: #7fb853;
+}
 
-    }
-    .bg{
-        width: 100%;
-        height: 200px;
-        position: absolute;
-        left: 0;
-        z-index: -1;
-    }
-    .me{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        text-align: center;
-    }
-    .myHeadPic{
-        height: 60px;
-        width: 60px;
-        border: 3px solid rgb(247, 236, 236);
-        border-radius: 60px;
-        overflow: hidden;
-        margin-top: 10px;
-        margin-left: 140px;
-    }
-    .name{
-        font-size: 19px;
-        
-    }
-    .infos{
-        margin-top: -65px;
-        display: flex;
-        width: 100%;
-        color: white;
-    }
-    .info{
-        margin: 80px 20px 0 20px;
-        width: 80px;
-        text-align: center;
-    }
-    .infoTitle{
-        width: 100px;
-        font-size: 15px;
-    }
-    .infoCount{
-        
-        font-size: 20px;
-    }
-    .body{
-        flex: 1;
-        width: 100%;
-        overflow: hidden;
-        display: flex;
-        position: relative;
-        flex-direction: column;
-        
-    }
-    .title{
-        margin: 0;
-        font-size: 16px;
-        font-weight: lighter;
-        font-size: 14px;        
-        padding: 3px 15px;
-        background-color: #eeeeee;
-        width: 100%;
-    }
-    .details{
-        overflow: scroll;
-    }
-    .detail{
-        border-bottom: 1px solid #efefef;
-        display: flex;
-        height: 50px;
-        align-items: center;
-        font-size: 14px;
-    }
-    .date{
-        margin: 0 10px 0 15px;
-        color: #909090;
-    }
-    .hitCard{
-        flex:1;
-        color: #ffcb6c;
-    }
-    .money{
-        margin-right: 20px;
-        color: #7fb853;
-    }
-    
-    .foot {
-        background-color: #f2f2f2;
-        display: flex;
-        justify-content: space-around;
-        height: 50px;
-        width: 100%;
-    }
-    .tabIcon {
-        height: 20px;
-        margin-left: 3px;
-        margin-top: 4px;
-    }
-    .tabName{
-        font-size: 13px;
-    }
-    .Home{
-        color:hsl(202, 100%, 50%);
-    }
-    
+.foot {
+  background-color: #f2f2f2;
+  display: flex;
+  justify-content: space-around;
+  height: 50px;
+  width: 100%;
+}
+.tabIcon {
+  height: 20px;
+  margin-left: 3px;
+  margin-top: 7px;
+}
+.tabName {
+  font-size: 13px;
+  margin-top: -3px;
+}
+.My {
+  color: hsl(202, 100%, 50%);
+}
 </style>

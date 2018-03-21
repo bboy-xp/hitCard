@@ -176,7 +176,12 @@ class HomeController extends Controller {
     }).sort({'hitCardTime':1});
     info.earlestStar = earlestStar[0];
     //获取毅力之星
-    var harderStar = await User.find({}).sort({ 'money': -1 });
+    var harderStar = await Record.find({
+      hitCardTime: {
+        $gte: nowday,
+        $lt: now
+      }
+    }).sort({ 'money': -1 });
     info.harderStar = harderStar[0];
     //获取运气之星
     var luckStar = await Record.find({

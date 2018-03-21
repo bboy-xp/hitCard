@@ -89,14 +89,16 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  
 }
 .head {
   height: 200px;
   width:100%;
+  overflow: hidden;
+  position: relative;
 }
 .bg {
   width: 100%;
-  height: 32vh;
   position: absolute;
   left: 0;
   z-index: -1;
@@ -116,7 +118,8 @@ export default {
   margin: 10px auto 0 auto;
 }
 .name {
-  font-size: 19px;
+  font-size: 21px;
+  color: #ffffff;
 }
 .infos {
   margin-top: -65px;
@@ -147,6 +150,7 @@ margin-left: 10%;
   display: flex;
   position: relative;
   flex-direction: column;
+  
 }
 .title {
   margin: 0;

@@ -139,6 +139,7 @@ export default {
         resolve(res.data);
       });
     });
+    console.log(info);
     this.totalPeople = info.todayJoinCount;
     this.totalMoney = info.todayJoinCount;
     this.successPeople = info.hitCardDocs.length;
@@ -220,7 +221,8 @@ export default {
         axios.post("/successHitCard", { name: this.name }).then(res => {
           if (res.data == "ok") {
             alert("签到成功,明天再接再厉!");
-            this.btnText = "参与打卡挑战";
+            window.location.reload();
+            // this.btnText = "参与打卡挑战";
           } else {
             alert(res.data);
           }

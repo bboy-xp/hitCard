@@ -1,10 +1,13 @@
 'use strict';
 
 const Controller = require('egg').Controller;
+const { readFileSync } = require('fs');
+const { resolve } = require('path');
 
 class HomeController extends Controller {
   async index() {
-    this.ctx.body = 'hi, egg';
+    const data = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
+    this.ctx.body = data;
   }
   async join() {
     const ctx = this.ctx;

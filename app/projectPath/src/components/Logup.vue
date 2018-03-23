@@ -35,6 +35,7 @@ export default {
         //   console.log(data);
           axios.post("/logup", data).then(res => {
             if (res.data === "ok") {
+              alert('注册成功');
               this.$router.push({path: '/'});
             }
           });

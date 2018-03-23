@@ -140,7 +140,7 @@ export default {
         resolve(res.data);
       });
     });
-    console.log(info);
+    // console.log(info);
 
     //计算成功人数和失败人数
     this.totalPeople = info.todayJoinCount;

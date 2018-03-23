@@ -73,7 +73,7 @@ export default {
       this.pay = res.data.totalMoney;
       this.harvest = res.data.harvest;
       this.infos = totalHitCard;
-      console.log(res.data);
+      // console.log(res.data);
     });
   },
   methods: {
@@ -211,7 +211,6 @@ margin-left: 10%;
 .My {
   color: hsl(202, 100%, 50%);
   margin-top: -5px;
-  margin-left: 1px;
 }
 .Home {
   margin-top: -8px;

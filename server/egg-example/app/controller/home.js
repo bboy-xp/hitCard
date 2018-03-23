@@ -182,7 +182,7 @@ class HomeController extends Controller {
     var harderStar = await User.find({
       
     }).sort({ 'money': -1 });
-    console.log(harderStar);
+    // console.log(harderStar);
     info.harderStar = harderStar[0];
     //获取运气之星
     var luckStar = await Record.find({
@@ -207,7 +207,7 @@ class HomeController extends Controller {
           resolve(docs.length);
         });
       });
-      info.totalHitCard = await new Promise((resolve,reject) => {
+      var totalHitCard = await new Promise((resolve,reject) => {
         Record.find({
           name: name,
           use: true,
@@ -216,6 +216,13 @@ class HomeController extends Controller {
           resolve(docs);
         })
       })
+      info.totalHitCard = totalHitCard;
+      var harvest = 0;
+      for (let i = 0; i < totalHitCard.length; i++) {
+        harvest += totalHitCard[i].getMoney  
+      }
+      // console.log(totalHitCard);
+      info.harvest = harvest;
     ctx.body = info;
   }
   async successHitCard() {

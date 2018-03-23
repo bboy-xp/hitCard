@@ -63,15 +63,16 @@ export default {
   mounted: async function() {
     this.name = this.$route.query.name;
     axios.post("/meGetInfo", { name: this.name }).then(res => {
-      this.pay = res.data.totalMoney;
       this.hitCard = res.data.totalHitCard.length;
       var totalHitCard = res.data.totalHitCard;
       var totalMoney = 0;
       for (let i = 0; i < totalHitCard.length; i++) {
         totalMoney += totalMoney;
       }
-      this.harvest = totalMoney;
+      this.pay = res.data.totalMoney;
+      this.harvest = res.data.harvest;
       this.infos = totalHitCard;
+      console.log(res.data);
     });
   },
   methods: {

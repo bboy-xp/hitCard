@@ -411,7 +411,7 @@ export default {
 }
 .tabIcon {
   height: 20px;
-  margin-left: 3px;
+  margin-left: 5px;
   margin-top: 7px;
 }
 .tabIconHome {

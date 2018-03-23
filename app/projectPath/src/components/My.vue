@@ -1,7 +1,7 @@
 <template>
     <div class="contain">
         <div class="head">
-            <img src="../../static/picture/bg.jpg" alt="" class="bg">
+            <img v-bind:src=headPicSrc alt="" class="bg">
             <div class="me">
                 <img class="myHeadPic" src="../../static/picture/head.png" alt="">
                 <div class="name">
@@ -36,12 +36,12 @@
         <div class="foot">
             <div v-on:click="gotoHome">
                 <div class="tab">
-                    <img class="tabIcon" src="../../static/picture/home.png" alt="">
+                    <img class="tabIconHome" src="../../static/picture/blackHome.png" alt="">
                     <div class="tabName Home">首页</div>
                 </div>
             </div>
             <div class="tab">
-                <img class="tabIcon" src="../../static/picture/me.png" alt="">
+                <img class="tabIcon" src="../../static/picture/blueMe.png" alt="">
                 <div class="tabName My">我的</div>
             </div>
         </div>
@@ -57,7 +57,8 @@ export default {
       pay: 0,
       harvest: 0,
       hitCard: 0,
-      infos: []
+      infos: [],
+      headPicSrc: "../../static/picture/bg.jpg"
     };
   },
   mounted: async function() {
@@ -194,14 +195,27 @@ margin-left: 10%;
 }
 .tabIcon {
   height: 20px;
-  margin-left: 3px;
+  margin-left: 2px;
   margin-top: 7px;
 }
+.tabIconHome {
+  height: 25px;
+  
+  margin-top: 5px;
+}
 .tabName {
-  font-size: 13px;
-  margin-top: -3px;
+  font-size: 9px;
+  margin-top: -5px;
+  margin-left: 2px;
 }
 .My {
   color: hsl(202, 100%, 50%);
+  margin-top: -5px;
+  margin-left: 1px;
+}
+.Home {
+  margin-top: -8px;
+  margin-left: 1px;
+
 }
 </style>

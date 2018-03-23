@@ -33,7 +33,7 @@
                 <div class="users">
                     <div class="user">
                         <div class="userHead">
-                            <img class="headPic" src="../../static/picture/head.png" alt="">
+                            <img class="headPic" v-bind:src=headPicSrc alt="">
                         </div>
                         <div class="userTitle color1">早起之星</div>
                         <div class="name">{{name1}}</div>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="user">
                         <div class="userHead">
-                            <img class="headPic" src="../../static/picture/head.png" alt="">
+                            <img class="headPic" v-bind:src=headPicSrc alt="">
                         </div>
                         <div class="userTitle color2">运气之星</div>
                         <div class="name">{{name2}}</div>
@@ -49,7 +49,7 @@
                     </div>
                     <div class="user">
                         <div class="userHead">
-                            <img class="headPic" src="../../static/picture/head.png" alt="">
+                            <img class="headPic" v-bind:src=headPicSrc alt="">
                         </div>
                         <div class="userTitle color3">毅力之星</div>
                         <div class="name">{{name3}}</div>
@@ -60,12 +60,12 @@
         </div>
         <div class="foot">
             <div class="tab">
-                <img class="tabIcon" src="../../static/picture/home.png" alt="">
+                <img class="tabIconHome" src="../../static/picture/blueHome.png" alt="">
                 <div class="tabName Home">首页</div>
             </div>
             <div v-on:click="gotoMy">
                 <div class="tab">
-                    <img class="tabIcon" src="../../static/picture/me.png" alt="">
+                    <img class="tabIcon" src="../../static/picture/blackMe.png" alt="">
                     <div class="tabName My">我的</div>
                 </div>
             </div>
@@ -98,7 +98,8 @@ export default {
       startTime: new Date().getTime(),
       currentTime: new Date().getTime(),
       openRedBag: false,
-      canJoin: false
+      canJoin: false,
+      headPicSrc: "../../static/picture/head.png"
     };
   },
   computed: {
@@ -330,8 +331,11 @@ export default {
   width: 80vw;
   padding: 5px 0px;
   box-shadow: 5px 5px 5px #ffe4b3;
-  border-radius: 10px;
+  border-radius: 6px;
   background-color: #ffc351;
+  font-size: 13px;
+  color: white;
+  letter-spacing:1px;
 }
 .joinRule {
   font-size: 12px;
@@ -343,7 +347,7 @@ export default {
   font-family: "\9ED1\4F53";
 }
 .title {
-  font-size: 20px;
+  font-size: 18px;
   font-family: "黑体";
   font-weight: bolder;
   margin-top: 10px;
@@ -370,6 +374,7 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
+  padding-top: 10px;
 }
 .user {
   display: flex;
@@ -409,11 +414,20 @@ export default {
   margin-left: 3px;
   margin-top: 7px;
 }
+.tabIconHome {
+  height: 25px;
+  
+  margin-top: 5px;
+}
 .tabName {
-  font-size: 13px;
-  margin-top: -3px;
+  font-size: 9px;
+  margin-top: -5px;
+  margin-left: 2px;
 }
 .Home {
   color: hsl(202, 100%, 50%);
+  margin-top: -8px;
+  margin-left: 1px;
+
 }
 </style>

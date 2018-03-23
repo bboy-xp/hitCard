@@ -34,11 +34,9 @@
             </div>
         </div>
         <div class="foot">
-            <div v-on:click="gotoHome">
-                <div class="tab">
-                    <img class="tabIconHome" src="../../static/picture/blackHome.png" alt="">
-                    <div class="tabName Home">首页</div>
-                </div>
+            <div class="tab" v-on:click="gotoHome">
+                <img class="tabIconHome" src="../../static/picture/blackHome.png" alt="">
+                <div class="tabName Home">首页</div>
             </div>
             <div class="tab">
                 <img class="tabIcon" src="../../static/picture/blueMe.png" alt="">
@@ -49,7 +47,7 @@
 </template>
 <script>
 import axios from "axios";
-import { clearTimeout } from 'timers';
+import { clearTimeout } from "timers";
 export default {
   data() {
     return {
@@ -91,11 +89,10 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
 }
 .head {
   height: 200px;
-  width:100%;
+  width: 100%;
   overflow: hidden;
   position: relative;
 }
@@ -133,12 +130,12 @@ export default {
 .info {
   margin-top: 80px;
   width: 22vw;
-  flex:1;
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
 .infoTitle {
-margin-left: 10%;
+  margin-left: 10%;
   width: 100px;
   font-size: 15px;
 }
@@ -152,7 +149,6 @@ margin-left: 10%;
   display: flex;
   position: relative;
   flex-direction: column;
-  
 }
 .title {
   margin: 0;
@@ -194,27 +190,26 @@ margin-left: 10%;
   width: 100%;
 }
 .tabIcon {
-  height: 20px;
-  margin-left: 5px;
-  margin-top: 7px;
+  height: 25px;
+  width: 25px;
+  background-size: 100% 100%;
 }
 .tabIconHome {
   height: 25px;
-  
-  margin-top: 5px;
+  width: 25px;
+  background-size: 100% 100%;
 }
 .tabName {
   font-size: 9px;
-  margin-top: -5px;
-  margin-left: 2px;
+
+}
+.tap {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 .My {
   color: hsl(202, 100%, 50%);
-  margin-top: -5px;
 }
-.Home {
-  margin-top: -8px;
-  margin-left: 1px;
 
-}
 </style>

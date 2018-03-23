@@ -63,12 +63,10 @@
                 <img class="tabIconHome" src="../../static/picture/blueHome.png" alt="">
                 <div class="tabName Home">首页</div>
             </div>
-            <div v-on:click="gotoMy">
-                <div class="tab">
+                <div class="tab" v-on:click="gotoMy">
                     <img class="tabIcon" src="../../static/picture/blackMe.png" alt="">
-                    <div class="tabName My">我的</div>
+                    <div class="tabName">我的</div>
                 </div>
-            </div>
         </div>
     </div>
 </template>
@@ -335,7 +333,7 @@ export default {
   background-color: #ffc351;
   font-size: 13px;
   color: white;
-  letter-spacing:1px;
+  letter-spacing: 1px;
 }
 .joinRule {
   font-size: 12px;
@@ -410,24 +408,24 @@ export default {
   width: 100%;
 }
 .tabIcon {
-  height: 20px;
-  margin-left: 5px;
-  margin-top: 7px;
+  height: 25px;
+  width:25px;
+  background-size:100% 100%;
 }
 .tabIconHome {
   height: 25px;
-  
-  margin-top: 5px;
+  width:25px;
+  background-size:100% 100%;
 }
 .tabName {
   font-size: 9px;
-  margin-top: -5px;
-  margin-left: 2px;
+}
+.tap{
+  display: flex;
+  flex-direction:column;
+  justify-content:space-around;
 }
 .Home {
   color: hsl(202, 100%, 50%);
-  margin-top: -8px;
-  margin-left: 1px;
-
 }
 </style>

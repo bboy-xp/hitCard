@@ -140,9 +140,13 @@ export default {
       });
     });
     console.log(info);
+
+    //计算成功人数和失败人数
     this.totalPeople = info.todayJoinCount;
     this.totalMoney = info.todayJoinCount;
+    //hitCardDocs查询数据库今天成功签到
     this.successPeople = info.hitCardDocs.length;
+    //yesterdayJoinDocs查询昨天的参与挑战
     this.failPeople = info.yesterdayJoinDocs.length - info.hitCardDocs.length;
 
     // 开始写早起之星逻辑
@@ -153,11 +157,11 @@ export default {
       earlestStarTime = new Date(earlestStarTime);
       var earlestStarTimeHour = earlestStarTime.getHours();
       var earlestStarTimeMinute = earlestStarTime.getMinutes();
-      if(earlestStarTimeHour < 10){
-        earlestStarTimeHour = '0' + earlestStarTimeHour;
+      if (earlestStarTimeHour < 10) {
+        earlestStarTimeHour = "0" + earlestStarTimeHour;
       }
-      if(earlestStarTimeMinute < 10){
-        earlestStarTimeMinute = '0' + earlestStarTimeMinute;
+      if (earlestStarTimeMinute < 10) {
+        earlestStarTimeMinute = "0" + earlestStarTimeMinute;
       }
       var earlestStarTimeStr = String(
         earlestStarTimeHour + ":" + earlestStarTimeMinute
@@ -180,7 +184,7 @@ export default {
     }
     var now = new Date();
     var hour = now.getHours();
-    //判断时间在八点的前后
+    //判断时间在八点的前后，改变btntext的文字
     if (hour >= 8) {
       if (info.todayHaveUser) {
         this.btnText = "签到";
@@ -193,6 +197,16 @@ export default {
       } else {
         this.btnText = "参与打卡挑战";
       }
+    }
+    //判断时间在5点前后，改变签到成功失败的人数
+    if (hour >= 5) {
+      //hitCardDocs查询数据库今天成功签到
+      this.successPeople = info.hitCardDocs.length;
+      //yesterdayJoinDocs查询昨天的参与挑战
+      this.failPeople = info.yesterdayJoinDocs.length - info.hitCardDocs.length;
+    } else {
+      this.successPeople = 0;
+      this.failPeople = 0;
     }
   },
   methods: {
@@ -364,7 +378,7 @@ export default {
   margin: 0 25px;
 }
 .userTitle {
-  margin-top: -5px;
+  margin-top: 0px;
   font-size: 10px;
   padding: 1px 10px;
   font-weight: lighter;

@@ -420,10 +420,11 @@ export default {
 .tabName {
   font-size: 9px;
 }
-.tap{
+.tab{
   display: flex;
   flex-direction:column;
   justify-content:space-around;
+  align-items:center;
 }
 .Home {
   color: hsl(202, 100%, 50%);

@@ -203,10 +203,11 @@ export default {
   font-size: 9px;
 
 }
-.tap {
+.tab {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  align-items: center
 }
 .My {
   color: hsl(202, 100%, 50%);

@@ -190,17 +190,19 @@ export default {
   width: 100%;
 }
 .tabIcon {
-  height: 25px;
-  width: 25px;
+  margin-top: 5px;
+  height: 15px;
+  width: 15px;
   background-size: 100% 100%;
 }
 .tabIconHome {
-  height: 25px;
-  width: 25px;
+  margin-top: 5px;
+  height: 15px;
+  width: 15px;
   background-size: 100% 100%;
 }
 .tabName {
-  font-size: 9px;
+  font-size: 1vh;
 
 }
 .tab {

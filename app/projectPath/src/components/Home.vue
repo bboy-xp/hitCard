@@ -218,6 +218,7 @@ export default {
     join() {
       if (this.btnText === "参与打卡挑战" && this.canJoin) {
         alert("支付成功,参与挑战");
+        this.btnText === "签到";
         var data = {
           info: {
             name: this.name,
@@ -234,8 +235,8 @@ export default {
         axios.post("/successHitCard", { name: this.name }).then(res => {
           if (res.data == "ok") {
             alert("签到成功,明天再接再厉!");
+            this.btnText = "参与打卡挑战";
             window.location.reload();
-            // this.btnText = "参与打卡挑战";
           } else {
             alert(res.data);
           }

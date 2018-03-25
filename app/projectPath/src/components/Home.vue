@@ -217,6 +217,7 @@ export default {
     },
     join() {
       if (this.btnText === "参与打卡挑战" && this.canJoin) {
+        this.btnText = "签到";
         var data = {
           info: {
             name: this.name,

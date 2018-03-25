@@ -217,7 +217,6 @@ export default {
     },
     join() {
       if (this.btnText === "参与打卡挑战" && this.canJoin) {
-        this.btnText = "签到";
         var data = {
           info: {
             name: this.name,
@@ -228,7 +227,12 @@ export default {
           // console.log(res);
           if ((res.data = "ok")) {
             alert("支付成功,参与挑战");
-            window.location.reload();
+            this.btnText = '签到';
+            this.totalPeople += 1;
+            this.totalMoney += 1;
+            
+            // 在参与成功之后，不需要重新加载一遍页面，只需要像后端发送一个取回最新数据的请求
+            // window.location.reload();
           }
         });
       } else if (this.btnText === "签到" && this.openRedBag) {

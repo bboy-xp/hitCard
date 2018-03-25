@@ -230,7 +230,7 @@ export default {
             this.btnText = '签到';
             this.totalPeople += 1;
             this.totalMoney += 1;
-            
+
             // 在参与成功之后，不需要重新加载一遍页面，只需要像后端发送一个取回最新数据的请求
             // window.location.reload();
           }
@@ -383,7 +383,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 25px;
+  margin: 0 15px;
 }
 .userTitle {
   margin-top: 0px;

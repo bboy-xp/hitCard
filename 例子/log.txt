@@ -1,0 +1,2 @@
+learn wx.login()
+

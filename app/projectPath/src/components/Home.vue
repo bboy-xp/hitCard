@@ -120,6 +120,14 @@ export default {
       }
     }
   },
+  created:async function() {
+    //在这里拿到cookie判断
+    var allCookie = document.cookie;
+    console.log(!!allCookie);
+    // if(allCookie){
+    //   this.$router.push('Login');
+    // }
+  },
   mounted: async function get() {
     this.name = this.$route.query.name;
     // console.log(this.$route.query.name);

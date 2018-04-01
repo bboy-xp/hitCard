@@ -3,11 +3,13 @@
 const Controller = require('egg').Controller;
 const { readFileSync } = require('fs');
 const { resolve } = require('path');
+const axios = require('axios');
 
 class HomeController extends Controller {
   async index() {
-    const data = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
-    this.ctx.body = data;
+    // const data = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
+    // this.ctx.body = data;
+    this.ctx.body = 'ok';
   }
   async join() {
     const ctx = this.ctx;
@@ -56,7 +58,7 @@ class HomeController extends Controller {
           if (!!err) {
             console.log(err);
             reject(err);
-          }else{
+          } else {
             resolve("ok")
           }
         })
@@ -150,7 +152,7 @@ class HomeController extends Controller {
         }
       }, function (err, docs) {
         resolve(docs)
-        
+
       });
     });
     info.hitCardDocs = hitCardDocs;
@@ -163,24 +165,24 @@ class HomeController extends Controller {
         }
       }, (err, docs) => {
         resolve(docs);
-        
+
       })
     })
     info.yesterdayJoinDocs = yesterdayJoinDocs;
-    
+
     //获取早起之星
     var earlestStar = await Record.find({
       hitCardTime: {
         $gte: nowday,
         $lt: now
       }
-    },(err,docs) => {
-      
-    }).sort({'hitCardTime':1});
+    }, (err, docs) => {
+
+    }).sort({ 'hitCardTime': 1 });
     info.earlestStar = earlestStar[0];
     //获取毅力之星
     var harderStar = await User.find({
-      
+
     }).sort({ 'money': -1 });
     // console.log(harderStar);
     info.harderStar = harderStar[0];
@@ -191,38 +193,38 @@ class HomeController extends Controller {
         $lt: now
       },
       got: true
-      
-    }).sort({'getMoney': -1});
+
+    }).sort({ 'getMoney': -1 });
     info.luckStar = luckStar[0];
     ctx.body = info;
   }
   async meGetInfo() {
     const ctx = this.ctx;
-      var name = ctx.request.body.name;
-      var Record = ctx.model.Record;
-      var info = {};
-     // 用await promise的方法阻塞获得数据，就不会出现前端玄学接不到数据的情况了
-      info.totalMoney = await new Promise((resolve, reject) => {
-        Record.find({ name: name }, function (err, docs) {
-          resolve(docs.length);
-        });
+    var name = ctx.request.body.name;
+    var Record = ctx.model.Record;
+    var info = {};
+    // 用await promise的方法阻塞获得数据，就不会出现前端玄学接不到数据的情况了
+    info.totalMoney = await new Promise((resolve, reject) => {
+      Record.find({ name: name }, function (err, docs) {
+        resolve(docs.length);
       });
-      var totalHitCard = await new Promise((resolve,reject) => {
-        Record.find({
-          name: name,
-          use: true,
-          got: true
-        },(err,docs) => {
-          resolve(docs);
-        })
+    });
+    var totalHitCard = await new Promise((resolve, reject) => {
+      Record.find({
+        name: name,
+        use: true,
+        got: true
+      }, (err, docs) => {
+        resolve(docs);
       })
-      info.totalHitCard = totalHitCard;
-      var harvest = 0;
-      for (let i = 0; i < totalHitCard.length; i++) {
-        harvest += totalHitCard[i].getMoney  
-      }
-      // console.log(totalHitCard);
-      info.harvest = harvest;
+    })
+    info.totalHitCard = totalHitCard;
+    var harvest = 0;
+    for (let i = 0; i < totalHitCard.length; i++) {
+      harvest += totalHitCard[i].getMoney
+    }
+    // console.log(totalHitCard);
+    info.harvest = harvest;
     ctx.body = info;
   }
   async successHitCard() {
@@ -354,15 +356,25 @@ class HomeController extends Controller {
     // console.log(message);
     ctx.body = message;
   }
-  async logup(){
-    const ctx = this.ctx;
-    var data = ctx.request.body;
+  async getCode() {
+    const ctx = this.ctx
+    console.log('走到这里了');
     var Password = ctx.model.Password;
-    // console.log(data.password);
+    // 获取code
+    const code = ctx.query.code;
+    console.log(code);
+    const codeData = await axios.get(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx21174deccc6b6c4b&secret=903087872adb2b41d2a4cea77a53446f&code=${code}&grant_type=authorization_code`); 
+    const access_token = codeData.data.access_token;
+    const openid = codeData.data.openid;
+    const refresh_token = codeData.data.refresh_token;
+    const userMessages = await axios.get(`https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`);
+    
     const haveUser = await new Promise((resolve, reject) => {
       Password.find({
-        name: data.username
+        openid: userMessages.data.openid,
+        name: userMessages.data.nickname
       }, function (err, docs) {
+        console.log(docs);
         if (docs.length !== 0) {
           resolve(true);
         } else {
@@ -370,39 +382,102 @@ class HomeController extends Controller {
         }
       })
     });
+    console.log(haveUser);
     if (!haveUser) {
       var user = new Password({
-        name: data.username,
-        password: data.password
+        name: userMessages.data.nickname,
+        headImgUrl: userMessages.data.headimgurl,
+        sex: userMessages.data.sex,
+        city: userMessages.data.city,
+        province: userMessages.data.province,
+        country: userMessages.data.country,
+        openid: userMessages.data.openid
       })
       user.save();
-    }else{
-      ctx.body = '该用户名已处在'
+      ctx.cookies.set('openid', userMessages.data.openid, new Date(new Date().valueOf() + 1 * 24 * 60 * 60 * 1000));
+      const origanData = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
+      console.log('即将执行ctx.body1');
+      ctx.body = origanData;
+    } else {
+      const origanData = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
+      console.log('即将执行ctx.body2');
+      ctx.body = origanData;
     }
-    ctx.body = 'ok';
+    
+    // // 用code请求获得access_token
+    // axios.get(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx21174deccc6b6c4b&secret=903087872adb2b41d2a4cea77a53446f&code=${code}&grant_type=authorization_code`).then(function (res) {
+    //   // console.log(res.data);
+    //   const refresh_token = res.data.refresh_token;
+    //   // 刷新access_token
+    //   axios.get(`https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=wx21174deccc6b6c4b&grant_type=refresh_token&refresh_token=${refresh_token}`).then(function (res) {
+    //     // console.log(res.data);
+    //     const access_token = res.data.access_token;
+    //     const openid = res.data.openid;
+    //     axios.get(`https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`).then(async function (res) {
+    //       // console.log(res.data);
+    //       var data = res.data;
+    //       const haveUser = await new Promise((resolve, reject) => {
+    //         Password.find({
+    //           openid: data.openid,
+    //           name: data.nickname
+    //         }, function (err, docs) {
+    //           console.log(docs);
+    //           if (docs.length !== 0) {
+    //             resolve(true);
+    //           } else {
+    //             resolve(false);
+    //           }
+    //         })
+    //       });
+    //       console.log(haveUser);
+    //       if (!haveUser) {
+    //         var user = new Password({
+    //           name: data.nickname,
+    //           headImgUrl: data.headimgurl,
+    //           sex: data.sex,
+    //           city: data.city,
+    //           province: data.province,
+    //           country: data.country,
+    //           openid: data.openid
+    //         })
+    //         user.save();
+    //         ctx.cookies.set('openid', data.openid, new Date(new Date().valueOf() + 1 * 24 * 60 * 60 * 1000));
+    //         const origanData = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
+    //         console.log('即将执行ctx.body');
+    //         ctx.body = origanData;
+    //       } else {
+    //         console.log('即将执行ctx.body');
+    //         ctx.body = '该用户名已处在'
+    //       }
+    //     })
+    //   })
+    // })
+    // console.log(data.password);
+
+
   }
-  async login() {
-    const ctx = this.ctx;
-    var data = ctx.request.body;
-    var Password = ctx.model.Password;
-    const haveUser = await new Promise((resolve, reject) => {
-      Password.find({
-        name: data.username,
-        password: data.password
-      }, function (err, docs) {
-        if (docs.length !== 0) {
-          resolve(true);
-        } else {
-          resolve(false);
-        }
-      })
-    });
-    if(!haveUser){
-      ctx.body = '用户不存在';
-    }else{
-      ctx.body = 'ok';
-    }
-  }
+  // async login() {
+  //   const ctx = this.ctx;
+  //   var data = ctx.request.body;
+  //   var Password = ctx.model.Password;
+  //   const haveUser = await new Promise((resolve, reject) => {
+  //     Password.find({
+  //       name: data.username,
+  //       password: data.password
+  //     }, function (err, docs) {
+  //       if (docs.length !== 0) {
+  //         resolve(true);
+  //       } else {
+  //         resolve(false);
+  //       }
+  //     })
+  //   });
+  //   if(!haveUser){
+  //     ctx.body = '用户不存在';
+  //   }else{
+  //     ctx.body = 'ok';
+  //   }
+  // }
 }
 
 module.exports = HomeController;

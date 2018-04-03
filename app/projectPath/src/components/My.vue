@@ -1,9 +1,9 @@
 <template>
     <div class="contain">
         <div class="head">
-            <img v-bind:src=headPicSrc alt="" class="bg">
+            <img v-bind:src=bgPicSrc alt="" class="bg">
             <div class="me">
-                <img class="myHeadPic" src="../../static/picture/head.png" alt="">
+                <img class="myHeadPic" v-bind:src=headPicSrc alt="">
                 <div class="name">
                     {{name}}
                 </div>
@@ -56,11 +56,17 @@ export default {
       harvest: 0,
       hitCard: 0,
       infos: [],
-      headPicSrc: "../../static/picture/bg.jpg"
+      bgPicSrc: "../../static/picture/bg.jpg",
+      headPicSrc: "../../static/picture/head.png"
     };
   },
+  created:async function () {
+    const checkLogin = await axios.get('/checkLogin');
+    this.headPicSrc = checkLogin.data.headImgUrl;
+    this.name = checkLogin.data.name;
+  },
   mounted: async function() {
-    this.name = this.$route.query.name;
+    // this.name = this.$route.query.name;
     axios.post("/meGetInfo", { name: this.name }).then(res => {
       this.hitCard = res.data.totalHitCard.length;
       var totalHitCard = res.data.totalHitCard;
@@ -76,7 +82,7 @@ export default {
   },
   methods: {
     gotoHome() {
-      this.$router.replace({ path: "/Home", query: { name: this.name } });
+      this.$router.replace({ path: "/"});
     }
   }
 };

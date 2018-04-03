@@ -11,6 +11,7 @@ module.exports = app => {
   router.post('/meGetInfo', controller.home.meGetInfo);
   router.post('/successHitCard', controller.home.successHitCard);
   router.get('/getCode', controller.home.getCode);
+  router.get('/checkLogin', controller.home.checkLogin);
   // router.post('/logup', controller.home.logup);
   // router.post('/login', controller.home.login);
 };

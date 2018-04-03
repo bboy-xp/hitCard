@@ -122,31 +122,39 @@ export default {
   },
   created:async function() {
     //在这里拿到cookie判断
-    var allCookie = document.cookie;
-    console.log(!!allCookie);
-    // if(allCookie){
+    
+    const checkLogin = await axios.get('/checkLogin');
+    console.log(checkLogin.data);
+    this.headPicSrc = checkLogin.data.headImgUrl;
+    this.name = checkLogin.data.name;
+    if(checkLogin.data.message == 'no'){
+      this.$router.push('Login');
+    }
+    // if(allCookie.length == 0){
     //   this.$router.push('Login');
     // }
+    console.log(this.name);
   },
   mounted: async function get() {
-    this.name = this.$route.query.name;
+    // this.name = this.$route.query.name;
     // console.log(this.$route.query.name);
+    console.log(this.name);
     var date = new Date();
     var month = date.getMonth() + 1;
     var day = date.getDate();
-    var data = {
-      name: this.name
-    };
     //这里用time_range方法判断签到时间是否在早八点到五点
     this.openRedBag = this.time_range("05:00", "08:00");
-    //用time_range方法判断参与时间是否符合时间，
+    //用time_range方法判断参与时间是否符合时间
     this.canJoin = this.time_range("08:00", "23:50");
+    // console.log(that.name);
+    // const that = this;
     var info = await new Promise((resolve, reject) => {
-      axios.post("/getInfo", data).then(res => {
+      axios.post("/getInfo").then(res => {
+        // console.log(that.name);
         resolve(res.data);
       });
     });
-    // console.log(info);
+    console.log(info);
 
     //计算成功人数和失败人数
     this.totalPeople = info.todayJoinCount;
@@ -281,7 +289,7 @@ export default {
       }
     },
     gotoMy() {
-      this.$router.replace({ path: "/My", query: { name: this.name } });
+      this.$router.replace({ path: "/My"});
     }
   }
 };

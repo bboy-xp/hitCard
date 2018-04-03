@@ -39,18 +39,25 @@ class HomeController extends Controller {
         }
       })
     })
-    // console.log(haveUser);
+    console.log(haveUser);
+    var record = new Record({
+      name: name,
+      money: 1,
+      createTime: new Date(),
+      use: false
+    })
+    record.save();
+
     if (!haveUser) {
-
+      // 如果用户不存在，将数据插入到user表里面
       var user = new User({
-        name: name,
-        createTime: now,
-      })
-      user.save();
-
-
-    } else {
-
+          name: name,
+          createTime: now,
+        })
+        user.save();
+        console.log('执行没有用户的操作');
+      } else {
+      // 如果用户存在，更新user表里面的creatTime
       await new Promise((resolve, reject) => {
         User.update({ name: name }, {
           createTime: now,
@@ -64,18 +71,13 @@ class HomeController extends Controller {
         })
       })
     }
-
-    var record = new Record({
-      name: name,
-      money: 1,
-      createTime: new Date(),
-      use: false
-    })
-    record.save();
     ctx.body = 'ok';
   }
   async getInfo() {
     const ctx = this.ctx;
+    var User = ctx.model.User;
+    var Record = ctx.model.Record;
+    var Password = ctx.model.Password;
     //计算的查询日期
     const now = new Date();
     const nowDate = now.getDate();
@@ -83,11 +85,15 @@ class HomeController extends Controller {
     const nowYear = now.getFullYear();
     const aDayAgo = new Date(nowYear, nowMonth, nowDate - 1);
     const nowday = new Date(nowYear, nowMonth, nowDate);
-
-    var name = ctx.request.body.name;
+    var openid = ctx.cookies.get('openid');
+    var name = await new Promise((resolve,reject) => {
+      Password.findOne({openid:openid},(err,doc) => {
+        resolve(doc.name);
+      })
+    })
+    console.log(name);
     var info = {};
-    var User = ctx.model.User;
-    var Record = ctx.model.Record;
+    
     //注意Model.find查询数据库时回掉函数有顺序，先err后docs
     //查询今天支付总人数
     info.todayJoinCount = await new Promise((resolve, reject) => {
@@ -152,7 +158,6 @@ class HomeController extends Controller {
         }
       }, function (err, docs) {
         resolve(docs)
-
       });
     });
     info.hitCardDocs = hitCardDocs;
@@ -358,14 +363,15 @@ class HomeController extends Controller {
   }
   async getCode() {
     const ctx = this.ctx
-    console.log('走到这里了');
+    // console.log('走到这里了');
     var Password = ctx.model.Password;
     // 获取code
     const code = ctx.query.code;
-    console.log(code);
+    // console.log(code);
     const codeData = await axios.get(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx21174deccc6b6c4b&secret=903087872adb2b41d2a4cea77a53446f&code=${code}&grant_type=authorization_code`); 
     const access_token = codeData.data.access_token;
     const openid = codeData.data.openid;
+    console.log(openid);
     const refresh_token = codeData.data.refresh_token;
     const userMessages = await axios.get(`https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`);
     
@@ -374,7 +380,7 @@ class HomeController extends Controller {
         openid: userMessages.data.openid,
         name: userMessages.data.nickname
       }, function (err, docs) {
-        console.log(docs);
+        // console.log(docs);
         if (docs.length !== 0) {
           resolve(true);
         } else {
@@ -382,7 +388,7 @@ class HomeController extends Controller {
         }
       })
     });
-    console.log(haveUser);
+    // console.log(haveUser);
     if (!haveUser) {
       var user = new Password({
         name: userMessages.data.nickname,
@@ -394,11 +400,13 @@ class HomeController extends Controller {
         openid: userMessages.data.openid
       })
       user.save();
-      ctx.cookies.set('openid', userMessages.data.openid, new Date(new Date().valueOf() + 1 * 24 * 60 * 60 * 1000));
+      ctx.cookies.set('openid', userMessages.data.openid, new Date(new Date().valueOf() + 1 * 24 * 60 * 60 * 1000),'/');
       const origanData = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
       console.log('即将执行ctx.body1');
       ctx.body = origanData;
     } else {
+      console.log(userMessages.data.openid);
+      ctx.cookies.set('openid', userMessages.data.openid, new Date(new Date().valueOf() + 1 * 24 * 60 * 60 * 1000),'/');
       const origanData = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
       console.log('即将执行ctx.body2');
       ctx.body = origanData;
@@ -478,6 +486,70 @@ class HomeController extends Controller {
   //     ctx.body = 'ok';
   //   }
   // }
+  async checkLogin() {
+    // console.log('走到这里了');
+    const ctx = this.ctx;
+    let openid = ctx.cookies.get('openid');
+    console.log('openid是'+openid);
+    // console.log('openid:'+!!openid);
+    var Password = ctx.model.Password;
+    var data = {};
+    if(!!openid){
+      const haveUser = await new Promise((resolve, reject) => {
+        Password.find({
+          openid: openid
+        },(err,docs) => {
+          if(docs.legth == 0){
+            resolve(false);
+          }else{
+            resolve(true);
+          }
+        })
+      });
+      console.log('haveUser:'+haveUser);
+      if(haveUser){
+        const UserMessage = await new Promise((resolve, reject) => {
+          Password.find({
+            openid: openid
+          },(err,docs) => {
+            // console.log(docs);
+            // console.log(docs[0].openid);
+            data.name = docs[0].name;
+            data.headImgUrl = docs[0].headImgUrl;
+            data.openid = docs[0].openid;
+            resolve('ok');
+            // console.log('往data中插入数据完成');
+          })
+        });
+        // console.log('离开数据库查询');
+        data.message = 'yes';
+        // console.log(data);
+        ctx.body = data;
+      }
+    }else{
+      // console.log('走到这里啦');
+      data.message = 'no';
+      ctx.body = data;
+    }
+    // ctx.body = 'ok';
+    // const haveUser = await new Promise((resolve, reject) => {
+    //   Password.find({
+    //     openid: openid
+    //   },(err,docs) => {
+    //     if(docs.legth == 0){
+    //       resolve(false);
+    //     }else{
+    //       resolve(true);
+    //     }
+    //   })
+    // });
+    // console.log(haveUser);
+    // if(haveUser){
+    //   ctx.body = 'yes';
+    // }else{
+    //   ctx.body = 'no';
+    // }
+  }
 }
 
 module.exports = HomeController;

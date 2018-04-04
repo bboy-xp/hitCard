@@ -2,6 +2,7 @@ module.exports = app => {
     const mongoose = app.mongoose;
     const RecordSchema = new mongoose.Schema({
       name: { type: String },
+      headPicUrl: { type: String },
       money: { type: Number },//投入的钱数
       createTime: {type: Date},
       hitCardTime: {type: Date},

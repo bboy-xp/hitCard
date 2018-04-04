@@ -15,6 +15,7 @@ class HomeController extends Controller {
     const ctx = this.ctx;
     var name = ctx.request.body.info.name;
     var money = ctx.request.body.info.money;
+    var headPicUrl = ctx.request.body.info.headPicUrl;
     // var year = ctx.request.body.info.createTime.year;
     // var month = ctx.request.body.info.createTime.month;
     // var day = ctx.request.body.info.createTime.day;
@@ -39,9 +40,10 @@ class HomeController extends Controller {
         }
       })
     })
-    console.log(haveUser);
+    // console.log(haveUser);
     var record = new Record({
       name: name,
+      headPicUrl: headPicUrl,
       money: 1,
       createTime: new Date(),
       use: false
@@ -52,10 +54,11 @@ class HomeController extends Controller {
       // 如果用户不存在，将数据插入到user表里面
       var user = new User({
           name: name,
+          headPicUrl: headPicUrl,
           createTime: now,
         })
         user.save();
-        console.log('执行没有用户的操作');
+        // console.log('执行没有用户的操作');
       } else {
       // 如果用户存在，更新user表里面的creatTime
       await new Promise((resolve, reject) => {
@@ -91,7 +94,7 @@ class HomeController extends Controller {
         resolve(doc.name);
       })
     })
-    console.log(name);
+    // console.log(name);
     var info = {};
     
     //注意Model.find查询数据库时回掉函数有顺序，先err后docs
@@ -187,7 +190,9 @@ class HomeController extends Controller {
     info.earlestStar = earlestStar[0];
     //获取毅力之星
     var harderStar = await User.find({
-
+      money:{
+        $gte: 0
+      }
     }).sort({ 'money': -1 });
     // console.log(harderStar);
     info.harderStar = harderStar[0];
@@ -371,7 +376,7 @@ class HomeController extends Controller {
     const codeData = await axios.get(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx21174deccc6b6c4b&secret=903087872adb2b41d2a4cea77a53446f&code=${code}&grant_type=authorization_code`); 
     const access_token = codeData.data.access_token;
     const openid = codeData.data.openid;
-    console.log(openid);
+    // console.log(openid);
     const refresh_token = codeData.data.refresh_token;
     const userMessages = await axios.get(`https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`);
     
@@ -405,8 +410,9 @@ class HomeController extends Controller {
       console.log('即将执行ctx.body1');
       ctx.body = origanData;
     } else {
-      console.log(userMessages.data.openid);
-      ctx.cookies.set('openid', userMessages.data.openid, new Date(new Date().valueOf() + 1 * 24 * 60 * 60 * 1000),'/');
+      // console.log(userMessages.data.openid);
+      // ctx.cookies.set('openid', ctx.cookies.get('openid'), new Date(new Date().valueOf() + 1 * 24 * 60 * 60 * 1000),'/');
+      // console.log();
       const origanData = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
       console.log('即将执行ctx.body2');
       ctx.body = origanData;
@@ -506,7 +512,7 @@ class HomeController extends Controller {
           }
         })
       });
-      console.log('haveUser:'+haveUser);
+      // console.log('haveUser:'+haveUser);
       if(haveUser){
         const UserMessage = await new Promise((resolve, reject) => {
           Password.find({

@@ -60,13 +60,12 @@ export default {
       headPicSrc: "../../static/picture/head.png"
     };
   },
-  created:async function () {
+  mounted: async function() {
+    // this.name = this.$route.query.name;
     const checkLogin = await axios.get('/checkLogin');
     this.headPicSrc = checkLogin.data.headImgUrl;
     this.name = checkLogin.data.name;
-  },
-  mounted: async function() {
-    // this.name = this.$route.query.name;
+    
     axios.post("/meGetInfo", { name: this.name }).then(res => {
       this.hitCard = res.data.totalHitCard.length;
       var totalHitCard = res.data.totalHitCard;

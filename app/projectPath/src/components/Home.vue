@@ -33,7 +33,7 @@
                 <div class="users">
                     <div class="user">
                         <div class="userHead">
-                            <img class="headPic" v-bind:src=headPicSrc alt="">
+                            <img class="headPic" v-bind:src=headPicSrc1 alt="">
                         </div>
                         <div class="userTitle color1">早起之星</div>
                         <div class="name">{{name1}}</div>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="user">
                         <div class="userHead">
-                            <img class="headPic" v-bind:src=headPicSrc alt="">
+                            <img class="headPic" v-bind:src=headPicSrc2 alt="">
                         </div>
                         <div class="userTitle color2">运气之星</div>
                         <div class="name">{{name2}}</div>
@@ -49,7 +49,7 @@
                     </div>
                     <div class="user">
                         <div class="userHead">
-                            <img class="headPic" v-bind:src=headPicSrc alt="">
+                            <img class="headPic" v-bind:src=headPicSrc3 alt="">
                         </div>
                         <div class="userTitle color3">毅力之星</div>
                         <div class="name">{{name3}}</div>
@@ -97,7 +97,10 @@ export default {
       currentTime: new Date().getTime(),
       openRedBag: false,
       canJoin: false,
-      headPicSrc: "../../static/picture/head.png"
+      headPicUrl:'',
+      headPicSrc1: "../../static/picture/head.png",
+      headPicSrc2: "../../static/picture/head.png",
+      headPicSrc3: "../../static/picture/head.png",
     };
   },
   computed: {
@@ -120,25 +123,19 @@ export default {
       }
     }
   },
-  created:async function() {
+  mounted: async function get() {
     //在这里拿到cookie判断
     
     const checkLogin = await axios.get('/checkLogin');
-    console.log(checkLogin.data);
-    this.headPicSrc = checkLogin.data.headImgUrl;
+    // console.log(checkLogin.data);
+    this.headPicUrl = checkLogin.data.headImgUrl;
     this.name = checkLogin.data.name;
     if(checkLogin.data.message == 'no'){
       this.$router.push('Login');
     }
-    // if(allCookie.length == 0){
-    //   this.$router.push('Login');
-    // }
-    console.log(this.name);
-  },
-  mounted: async function get() {
     // this.name = this.$route.query.name;
     // console.log(this.$route.query.name);
-    console.log(this.name);
+    // console.log(this.name);
     var date = new Date();
     var month = date.getMonth() + 1;
     var day = date.getDate();
@@ -154,7 +151,7 @@ export default {
         resolve(res.data);
       });
     });
-    console.log(info);
+    // console.log(info);
 
     //计算成功人数和失败人数
     this.totalPeople = info.todayJoinCount;
@@ -168,6 +165,7 @@ export default {
     if (info.earlestStar != null) {
       var earlestStar = info.earlestStar;
       this.name1 = earlestStar.name;
+      this.headPicSrc1 = earlestStar.headPicUrl;
       var earlestStarTime = earlestStar.hitCardTime;
       earlestStarTime = new Date(earlestStarTime);
       var earlestStarTimeHour = earlestStarTime.getHours();
@@ -184,21 +182,23 @@ export default {
       this.hitCardTime = earlestStarTimeStr;
     }
 
-    // 开始写毅力之星的逻辑
-    if (info.harderStar != null) {
-      var harderStar = info.harderStar;
-      this.name3 = harderStar.name;
-      this.hitCardCount = harderStar.money;
-    }
-
     // 开始写运气之星的逻辑
     if (info.luckStar != null) {
       var luckStar = info.luckStar;
       this.name2 = luckStar.name;
+      this.headPicSrc2 = luckStar.headPicUrl;
       this.hitCardMoney = luckStar.getMoney;
     }
     var now = new Date();
     var hour = now.getHours();
+
+    // 开始写毅力之星的逻辑
+    if (info.harderStar != null) {
+      var harderStar = info.harderStar;
+      this.name3 = harderStar.name;
+      this.headPicSrc3 = harderStar.headPicUrl;
+      this.hitCardCount = harderStar.money;
+    }
     //判断时间在八点的前后，改变btntext的文字
     if (hour >= 8) {
       if (info.todayHaveUser) {
@@ -236,7 +236,8 @@ export default {
         var data = {
           info: {
             name: this.name,
-            money: 1
+            money: 1,
+            headPicUrl:this.headPicUrl
           }
         };
         axios.post("/join", data).then(res => {

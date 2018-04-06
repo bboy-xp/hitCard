@@ -12,7 +12,7 @@ export default {
   },
   methods: {
       login() {
-          location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx21174deccc6b6c4b&redirect_uri=http%3a%2f%2ftopsxp.top%3a7001%2fgetCode&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+          location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx21174deccc6b6c4b&redirect_uri=http://topsxp.top:7001/getCode#/&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
       }
   }
 }

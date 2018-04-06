@@ -368,7 +368,7 @@ class HomeController extends Controller {
   }
   async getCode() {
     const ctx = this.ctx
-    // console.log('走到这里了');
+    console.log('走到这里了');
     var Password = ctx.model.Password;
     // 获取code
     const code = ctx.query.code;

@@ -376,7 +376,6 @@ class HomeController extends Controller {
     const codeData = await axios.get(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx21174deccc6b6c4b&secret=903087872adb2b41d2a4cea77a53446f&code=${code}&grant_type=authorization_code`); 
     const access_token = codeData.data.access_token;
     const openid = codeData.data.openid;
-    // console.log(openid);
     const refresh_token = codeData.data.refresh_token;
     const userMessages = await axios.get(`https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`);
     
@@ -413,6 +412,10 @@ class HomeController extends Controller {
       // console.log(userMessages.data.openid);
       // ctx.cookies.set('openid', ctx.cookies.get('openid'), new Date(new Date().valueOf() + 1 * 24 * 60 * 60 * 1000),'/');
       // console.log();
+      // console.log(object);
+      // let openId = ctx.cookies.get('openid');
+      // console.log(openId);
+      ctx.cookies.set('openid', openid, new Date(new Date().valueOf() + 1 * 24 * 60 * 60 * 1000),'/');
       const origanData = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
       console.log('即将执行ctx.body2');
       ctx.body = origanData;
@@ -496,7 +499,7 @@ class HomeController extends Controller {
     // console.log('走到这里了');
     const ctx = this.ctx;
     let openid = ctx.cookies.get('openid');
-    console.log('openid是'+openid);
+    // console.log('openid是'+openid);
     // console.log('openid:'+!!openid);
     var Password = ctx.model.Password;
     var data = {};

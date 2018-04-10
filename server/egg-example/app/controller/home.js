@@ -368,7 +368,7 @@ class HomeController extends Controller {
   }
   async getCode() {
     const ctx = this.ctx
-    console.log('走到这里了');
+    // console.log('走到这里了');
     var Password = ctx.model.Password;
     // 获取code
     const code = ctx.query.code;
@@ -406,7 +406,7 @@ class HomeController extends Controller {
       user.save();
       ctx.cookies.set('openid', userMessages.data.openid, new Date(new Date().valueOf() + 1 * 24 * 60 * 60 * 1000),'/');
       const origanData = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
-      console.log('即将执行ctx.body1');
+      // console.log('即将执行ctx.body1');
       ctx.body = origanData;
     } else {
       // console.log(userMessages.data.openid);
@@ -417,7 +417,7 @@ class HomeController extends Controller {
       // console.log(openId);
       ctx.cookies.set('openid', openid, new Date(new Date().valueOf() + 1 * 24 * 60 * 60 * 1000),'/');
       const origanData = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
-      console.log('即将执行ctx.body2');
+      // console.log('即将执行ctx.body2');
       ctx.body = origanData;
     }
     

@@ -82,8 +82,8 @@ export default {
   data() {
     return {
       name,
-      totalPeople: 999999,
-      totalMoney: 999999,
+      totalPeople: "Loading",
+      totalMoney: 'Loading',
       successPeople: 0,
       failPeople: 0,
       name1: "",
@@ -302,6 +302,9 @@ export default {
 
 
 <style scoped>
+html {
+  font-size: calc(112.5% + 0.5vw);
+}
 .contain {
   height: 100vh;
   width: 100vw;
@@ -442,7 +445,7 @@ export default {
   background-size:100% 100%;
 }
 .tabName {
-  font-size: 1vh;
+  font-size: 4vw;
 }
 .tab{
   display: flex;

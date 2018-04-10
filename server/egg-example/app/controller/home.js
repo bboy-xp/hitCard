@@ -188,6 +188,16 @@ class HomeController extends Controller {
 
     }).sort({ 'hitCardTime': 1 });
     info.earlestStar = earlestStar[0];
+    //获取运气之星
+    var luckStar = await Record.find({
+      hitCardTime: {
+        $gte: nowday,
+        $lt: now
+      },
+      got: true
+      
+    }).sort({ 'getMoney': -1 });
+    info.luckStar = luckStar[0];
     //获取毅力之星
     var harderStar = await User.find({
       money:{
@@ -196,16 +206,6 @@ class HomeController extends Controller {
     }).sort({ 'money': -1 });
     // console.log(harderStar);
     info.harderStar = harderStar[0];
-    //获取运气之星
-    var luckStar = await Record.find({
-      hitCardTime: {
-        $gte: nowday,
-        $lt: now
-      },
-      got: true
-
-    }).sort({ 'getMoney': -1 });
-    info.luckStar = luckStar[0];
     ctx.body = info;
   }
   async meGetInfo() {
@@ -404,7 +404,7 @@ class HomeController extends Controller {
         openid: userMessages.data.openid
       })
       user.save();
-      ctx.cookies.set('openid', userMessages.data.openid, new Date(new Date().valueOf() + 1 * 24 * 60 * 60 * 1000),'/');
+      ctx.cookies.set('openid', userMessages.data.openid, new Date(new Date().valueOf() + 30 * 1 * 24 * 60 * 60 * 1000),'/');
       const origanData = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
       // console.log('即将执行ctx.body1');
       ctx.body = origanData;
@@ -415,7 +415,7 @@ class HomeController extends Controller {
       // console.log(object);
       // let openId = ctx.cookies.get('openid');
       // console.log(openId);
-      ctx.cookies.set('openid', openid, new Date(new Date().valueOf() + 1 * 24 * 60 * 60 * 1000),'/');
+      ctx.cookies.set('openid', openid, new Date(new Date().valueOf() + 30 * 1 * 24 * 60 * 60 * 1000),'/');
       const origanData = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
       // console.log('即将执行ctx.body2');
       ctx.body = origanData;

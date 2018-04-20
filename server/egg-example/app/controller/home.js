@@ -7,8 +7,8 @@ const axios = require('axios');
 
 class HomeController extends Controller {
   async index() {
-    // const data = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
-    // this.ctx.body = data;
+    const data = readFileSync(resolve(__dirname, '../public/index1.html'), 'utf8');
+    this.ctx.body = data;
     this.ctx.body = 'ok';
   }
   async join() {
@@ -405,7 +405,7 @@ class HomeController extends Controller {
       })
       user.save();
       ctx.cookies.set('openid', userMessages.data.openid, new Date(new Date().valueOf() + 30 * 1 * 24 * 60 * 60 * 1000),'/');
-      const origanData = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
+      const origanData = readFileSync(resolve(__dirname, '../public/index1.html'), 'utf8');
       // console.log('即将执行ctx.body1');
       ctx.body = origanData;
     } else {
@@ -416,7 +416,7 @@ class HomeController extends Controller {
       // let openId = ctx.cookies.get('openid');
       // console.log(openId);
       ctx.cookies.set('openid', openid, new Date(new Date().valueOf() + 30 * 1 * 24 * 60 * 60 * 1000),'/');
-      const origanData = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
+      const origanData = readFileSync(resolve(__dirname, '../public/index1.html'), 'utf8');
       // console.log('即将执行ctx.body2');
       ctx.body = origanData;
     }
@@ -459,7 +459,7 @@ class HomeController extends Controller {
     //         })
     //         user.save();
     //         ctx.cookies.set('openid', data.openid, new Date(new Date().valueOf() + 1 * 24 * 60 * 60 * 1000));
-    //         const origanData = readFileSync(resolve(__dirname, '../public/index.html'), 'utf8');
+    //         const origanData = readFileSync(resolve(__dirname, '../public/index1.html'), 'utf8');
     //         console.log('即将执行ctx.body');
     //         ctx.body = origanData;
     //       } else {

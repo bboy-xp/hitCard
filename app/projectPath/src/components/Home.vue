@@ -82,8 +82,8 @@ export default {
   data() {
     return {
       name,
-      totalPeople: "Loading",
-      totalMoney: 'Loading',
+      totalPeople: "...",
+      totalMoney: '...',
       successPeople: 0,
       failPeople: 0,
       name1: "",

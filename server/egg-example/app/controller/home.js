@@ -7,8 +7,8 @@ const axios = require('axios');
 
 class HomeController extends Controller {
   async index() {
-    const data = readFileSync(resolve(__dirname, '../public/index1.html'), 'utf8');
-    this.ctx.body = data;
+    // const data = readFileSync(resolve(__dirname, '../public/index1.html'), 'utf8');
+    // this.ctx.body = data;
     this.ctx.body = 'ok';
   }
   async join() {

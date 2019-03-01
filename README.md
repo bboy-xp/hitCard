@@ -24,8 +24,8 @@
 
 ```
 # 效果：
-![one](https://github.com/bboy-xp/hitCard/blob/master/%E4%BE%8B%E5%AD%90/Snipaste_2018-03-05_23-49-54.png)
-![two](https://github.com/bboy-xp/hitCard/blob/master/%E4%BE%8B%E5%AD%90/Snipaste_2018-03-05_23-44-19.png)
+![one](https://github.com/bboy-xp/hitCard/blob/master/assest/Snipaste_2018-03-05_23-49-54.png)
+![two](https://github.com/bboy-xp/hitCard/blob/master/assest/Snipaste_2018-03-05_23-44-19.png)
 
 > &#x26A0; Tips：欢迎在我的 [GitHub Issue](https://github.com/bboy-xp/hitCard/issues) 页沟通交流并提出您的宝贵建议，您的建议是我成长的动力来源 &#x1F603;
 
